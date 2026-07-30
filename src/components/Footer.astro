@@ -1,0 +1,36 @@
+---
+import { SITIO } from "../config";
+
+const anio = new Date().getFullYear();
+
+const redes = [
+  { href: SITIO.github, texto: "GitHub" },
+  { href: SITIO.linkedin, texto: "LinkedIn" },
+  { href: `mailto:${SITIO.email}`, texto: "Correo" },
+];
+---
+
+<footer class="border-t border-border/60 py-10">
+  <div
+    class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-sm text-ink-muted sm:flex-row"
+  >
+    <p>© {anio} {SITIO.nombre}</p>
+
+    <ul class="flex gap-5">
+      {
+        redes.map(({ href, texto }) => (
+          <li>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="transition hover:text-accent-soft"
+            >
+              {texto}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>

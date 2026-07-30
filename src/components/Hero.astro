@@ -1,0 +1,35 @@
+---
+import { SITIO } from "../config";
+---
+
+<section class="glow-field flex min-h-[85vh] items-center py-24">
+  <div class="mx-auto max-w-6xl px-6">
+    <p class="font-display text-sm tracking-[0.2em] text-accent uppercase">
+      Portafolio
+    </p>
+
+    <h1 class="mt-6 max-w-4xl text-5xl font-bold sm:text-6xl lg:text-7xl">
+      Construyo aplicaciones <span class="text-gradient">web y móviles</span>.
+    </h1>
+
+    <p class="mt-8 max-w-xl text-xl text-ink-muted">
+      {/* TODO (paso 4): una o dos frases sobre quién sos y qué hacés. */}
+      Desarrollador de software. Angular, Flutter y .NET.
+    </p>
+
+    <div class="mt-12 flex flex-wrap gap-4">
+      <a
+        href="#proyectos"
+        class="rounded-pill bg-accent px-7 py-3.5 font-medium text-bg transition hover:bg-accent-soft"
+      >
+        Ver proyectos
+      </a>
+      <a
+        href={`mailto:${SITIO.email}`}
+        class="rounded-pill border border-border px-7 py-3.5 font-medium text-ink-muted transition hover:border-accent hover:text-ink"
+      >
+        Contactar
+      </a>
+    </div>
+  </div>
+</section>

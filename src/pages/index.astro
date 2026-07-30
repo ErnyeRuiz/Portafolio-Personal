@@ -1,17 +1,19 @@
 ---
+import { getCollection } from "astro:content";
 
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import ProjectGrid from "../components/ProjectGrid.astro";
+import { SITIO } from "../config";
+
+const proyectos = (
+  await getCollection("proyectos", ({ data }) => !data.draft)
+).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout titulo={SITIO.titulo}>
+  <Hero />
+  <ProjectGrid proyectos={proyectos} />
+
+  {/* TODO (paso 6): secciones Sobre mí y Contacto. */}
+</BaseLayout>

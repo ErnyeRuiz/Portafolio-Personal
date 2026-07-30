@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Tokens de diseño. En Tailwind 4 cada variable de @theme genera
+   utilidades automáticamente: --color-surface → bg-surface,
+   --font-display → font-display, --radius-card → rounded-card.
+   --------------------------------------------------------------- */
+@theme {
+  /* Superficies */
+  --color-bg: #0a0f1e;
+  --color-surface: #111827;
+  --color-border: #1f2a3d;
+
+  /* Acentos */
+  --color-accent: #0ea5e9;
+  --color-accent-deep: #0284c7;
+  --color-accent-soft: #a5f3fc;
+  --color-pop: #f472b6;
+
+  /* Texto */
+  --color-ink: #e6edf7;
+  --color-ink-muted: #8fa3bf;
+
+  /* Tipografía */
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Formas */
+  --radius-card: 18px;
+  --radius-pill: 50px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ---------------------------------------------------------------
+   El resplandor. Elipses radiales grandes de baja opacidad detrás
+   del contenido: esto es lo que da el look "dark con glow".
+   Se aplica sobre un contenedor con position:relative.
+   --------------------------------------------------------------- */
+.glow-field {
+  position: relative;
+  isolation: isolate;
+}
+
+.glow-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 55% 65% at 75% 35%,
+      rgb(14 165 233 / 0.28),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 45% 55% at 8% 90%,
+      rgb(2 132 199 / 0.2),
+      transparent 70%
+    );
+}
+
+/* Variante suave para secciones interiores */
+.glow-soft::before {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 0%,
+    rgb(14 165 233 / 0.14),
+    transparent 70%
+  );
+}
+
+/* Borde con degradado, como las tarjetas de la referencia */
+.card-gradient-border {
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(135deg, var(--color-accent), transparent 55%) border-box;
+  border: 1px solid transparent;
+}
+
+/* Texto con degradado para acentuar una palabra del título */
+.text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-soft) 0%,
+    var(--color-accent) 55%,
+    var(--color-accent-deep) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------------------------------------------------------
+   Animación de entrada al hacer scroll. CSS puro, sin JavaScript.
+   --------------------------------------------------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 28%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .rise {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

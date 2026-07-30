@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProjectRow from "./ProjectRow.astro";
+
+interface Props {
+  proyectos: CollectionEntry<"proyectos">[];
+}
+
+const { proyectos } = Astro.props;
+
+/* Este componente decide el layout según cuántos proyectos haya.
+   Con pocos, filas anchas alternadas: cada proyecto ocupa la pantalla
+   y el conjunto no se ve escaso. Al pasar de ~4, las filas se vuelven
+   larguísimas y conviene cambiar a cuadrícula dejando las filas anchas
+   solo para los `destacado: true`. Ese cambio se hace acá y nada más. */
+const UMBRAL_CUADRICULA = 4;
+const usarFilas = proyectos.length < UMBRAL_CUADRICULA;
+---
+
+<section id="proyectos" class="glow-field glow-soft scroll-mt-24 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl px-6">
+    <header class="rise mb-16 max-w-2xl">
+      <h2 class="text-3xl font-bold sm:text-4xl">Proyectos</h2>
+      <p class="mt-4 text-lg text-ink-muted">
+        Lo que he construido, con el porqué de cada decisión.
+      </p>
+    </header>
+
+    {
+      usarFilas ? (
+        <div class="space-y-28 sm:space-y-36">
+          {proyectos.map((proyecto, i) => (
+            <ProjectRow proyecto={proyecto} indice={i} />
+          ))}
+        </div>
+      ) : (
+        /* TODO (cuando haya 4+): cuadrícula de 2 columnas con ProjectCard,
+           reservando ProjectRow para los destacados. */
+        <div class="grid gap-10 sm:grid-cols-2">
+          {proyectos.map((proyecto, i) => (
+            <ProjectRow proyecto={proyecto} indice={i} />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>

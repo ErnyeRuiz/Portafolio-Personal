@@ -1,0 +1,101 @@
+---
+import type { CollectionEntry } from "astro:content";
+import DeviceFrame from "./DeviceFrame.astro";
+
+interface Props {
+  proyecto: CollectionEntry<"proyectos">;
+  indice: number;
+}
+
+const { proyecto, indice } = Astro.props;
+const { titulo, resumen, tipo, portada, stack, rol, repo, demo, apk } =
+  proyecto.data;
+
+/* Filas alternadas: la imagen cambia de lado en cada proyecto. */
+const imagenDerecha = indice % 2 === 1;
+const numero = String(indice + 1).padStart(2, "0");
+const etiquetaTipo = tipo === "web" ? "Web" : "Móvil";
+
+const enlaces = [
+  { href: `/proyectos/${proyecto.id}`, texto: "Ver caso", principal: true },
+  repo && { href: repo, texto: "Repositorio ↗", externo: true },
+  demo && { href: demo, texto: "Demo ↗", externo: true },
+  apk && { href: apk, texto: "Descargar APK ↓", externo: true },
+].filter(Boolean) as {
+  href: string;
+  texto: string;
+  principal?: boolean;
+  externo?: boolean;
+}[];
+---
+
+<article class="rise grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+  <a
+    href={`/proyectos/${proyecto.id}`}
+    class="group block"
+    class:list={[imagenDerecha && "lg:order-2"]}
+    aria-label={`Ver el caso de ${titulo}`}
+  >
+    <DeviceFrame
+      tipo={tipo}
+      src={portada}
+      alt={`Captura de ${titulo}`}
+      eager={indice === 0}
+    />
+  </a>
+
+  <div class:list={[imagenDerecha && "lg:order-1"]}>
+    <p class="font-display text-sm tracking-[0.2em] text-accent uppercase">
+      {numero} / {etiquetaTipo}
+    </p>
+
+    <h3 class="mt-3 text-4xl font-bold sm:text-5xl">
+      <a href={`/proyectos/${proyecto.id}`} class="hover:text-accent-soft">
+        {titulo}
+      </a>
+    </h3>
+
+    <p class="mt-4 max-w-prose text-lg text-ink-muted">{resumen}</p>
+
+    <ul class="mt-6 flex flex-wrap gap-2">
+      {
+        rol && (
+          <li class="rounded-pill border border-accent/40 bg-accent/10 px-3 py-1 text-sm text-accent-soft">
+            {rol}
+          </li>
+        )
+      }
+      {
+        stack.map((tec) => (
+          <li class="rounded-pill border border-border bg-surface px-3 py-1 text-sm text-ink-muted">
+            {tec}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-8 flex flex-wrap items-center gap-3">
+      {
+        enlaces.map(({ href, texto, principal, externo }) =>
+          principal ? (
+            <a
+              href={href}
+              class="rounded-pill bg-accent px-6 py-3 font-medium text-bg transition hover:bg-accent-soft"
+            >
+              {texto} →
+            </a>
+          ) : (
+            <a
+              href={href}
+              target={externo ? "_blank" : undefined}
+              rel={externo ? "noopener noreferrer" : undefined}
+              class="rounded-pill border border-border px-6 py-3 font-medium text-ink-muted transition hover:border-accent hover:text-ink"
+            >
+              {texto}
+            </a>
+          ),
+        )
+      }
+    </div>
+  </div>
+</article>

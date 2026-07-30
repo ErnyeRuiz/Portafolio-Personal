@@ -1,0 +1,51 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  tipo: "web" | "movil";
+  src: ImageMetadata;
+  alt: string;
+  /** La portada de la primera fila carga con prioridad (mejora el LCP). */
+  eager?: boolean;
+}
+
+const { tipo, src, alt, eager = false } = Astro.props;
+const loading = eager ? "eager" : "lazy";
+---
+
+{
+  tipo === "web" ? (
+    <div class="card-gradient-border overflow-hidden rounded-card shadow-2xl shadow-black/50 transition duration-500 group-hover:-translate-y-1 group-hover:shadow-accent/10">
+      {/* Barra del navegador */}
+      <div class="flex items-center gap-2 border-b border-border/70 px-4 py-3">
+        <span class="size-3 rounded-full bg-white/15" />
+        <span class="size-3 rounded-full bg-white/15" />
+        <span class="size-3 rounded-full bg-white/15" />
+        <div class="ml-3 h-5 flex-1 rounded-pill bg-black/30" />
+      </div>
+      <Image
+        src={src}
+        alt={alt}
+        widths={[480, 800, 1200]}
+        sizes="(max-width: 1024px) 100vw, 55vw"
+        loading={loading}
+        class="w-full"
+      />
+    </div>
+  ) : (
+    <div class="mx-auto w-[min(280px,70vw)]">
+      {/* Marco de teléfono */}
+      <div class="card-gradient-border relative rounded-[2.75rem] p-3 shadow-2xl shadow-black/50 transition duration-500 group-hover:-translate-y-1 group-hover:shadow-accent/10">
+        <div class="absolute left-1/2 top-5 z-10 h-6 w-24 -translate-x-1/2 rounded-pill bg-black/70" />
+        <Image
+          src={src}
+          alt={alt}
+          widths={[280, 560, 840]}
+          sizes="280px"
+          loading={loading}
+          class="w-full rounded-[2rem]"
+        />
+      </div>
+    </div>
+  )
+}
