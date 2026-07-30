@@ -7,9 +7,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: cambiar por la URL real de Vercel. La necesitan el sitemap
-  // y las URLs canónicas del <head>.
-  site: 'https://ejemplo.vercel.app',
+  // Dominio de producción. Lo usan el sitemap y las URLs canónicas del <head>.
+  site: 'https://portafolio-personal-phi-black.vercel.app',
 
   vite: {
     plugins: [tailwindcss()]
