@@ -2,7 +2,7 @@
 /* Versión mínima para que los enlaces no queden rotos.
    El paso 5 del plan la desarrolla: galería, prosa cuidada, navegación
    entre proyectos y metadatos propios. */
-import { getCollection, render } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -18,9 +18,22 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const { proyecto } = Astro.props;
-const { titulo, resumen, tipo, portada, stack, rol, repo, demo, apk } =
+const { titulo, resumen, tipo, portada, galeria, stack, rol, repo, demo, apk } =
   proyecto.data;
 const { Content } = await render(proyecto);
+
+// Backend vive en su propio archivo (misma arquitectura limpia, decisiones
+// distintas por proyecto). Es opcional: si no existe, la sección no se pinta.
+const backend = await getEntry("backend", proyecto.id);
+const BackendContent = backend ? (await render(backend)).Content : undefined;
+
+// CampingPlace mezcla capturas de escritorio (anchas) y de celular en la
+// misma galería: 1 a la vez en desktop se ve mejor, 2 en mobile. El resto
+// de proyectos mantiene siempre 2.
+const galeriaItemWidth =
+  proyecto.id === "camping-place"
+    ? "w-[calc(50%-0.75rem)] sm:w-full"
+    : "w-[calc(50%-0.75rem)]";
 ---
 
 <BaseLayout titulo={`${titulo} — ${SITIO.nombre}`} descripcion={resumen}>
@@ -84,8 +97,122 @@ const { Content } = await render(proyecto);
     >
       <Content />
     </div>
+
+    {
+      galeria.length > 0 && (
+        <div class="mx-auto mt-20 max-w-5xl px-6">
+          <h2 class="text-3xl font-bold sm:text-4xl">Galería</h2>
+
+          <div class="relative mt-8 px-12">
+            <div
+              data-carousel-track
+              class="carousel-track flex items-center snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth"
+            >
+              {galeria.map((item) => (
+                <figure class:list={[galeriaItemWidth, "flex-none snap-start"]}>
+                  <DeviceFrame
+                    tipo={item.tipo ?? tipo}
+                    src={item.src}
+                    alt={item.alt}
+                  />
+                  <figcaption class="mt-3 text-center text-sm text-ink-muted">
+                    {item.alt}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              aria-label="Captura anterior"
+              data-carousel-prev
+              class="absolute left-0 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-pill border border-border text-ink-muted transition hover:border-accent hover:text-ink"
+            >
+              ‹
+            </button>
+
+            <button
+              type="button"
+              aria-label="Siguiente captura"
+              data-carousel-next
+              class="absolute right-0 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-pill border border-border text-ink-muted transition hover:border-accent hover:text-ink"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      backend && BackendContent && (
+        <div class="glow-soft mx-auto mt-20 max-w-3xl px-6">
+          <div class="card-gradient-border rounded-card p-8 sm:p-10">
+            <p class="font-display text-sm tracking-[0.2em] text-accent uppercase">
+              Backend
+            </p>
+            <h2 class="mt-3 text-3xl font-bold sm:text-4xl">
+              {backend.data.arquitectura}
+            </h2>
+
+            <ul class="mt-6 flex flex-wrap gap-2">
+              {backend.data.stack.map((tec) => (
+                <li class="rounded-pill border border-border bg-bg px-3 py-1 text-sm text-ink-muted">
+                  {tec}
+                </li>
+              ))}
+            </ul>
+
+            {backend.data.repo && (
+              <div class="mt-7">
+                <a
+                  href={backend.data.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="rounded-pill border border-border px-5 py-2.5 text-sm font-medium text-ink-muted transition hover:border-accent hover:text-ink"
+                >
+                  Repositorio ↗
+                </a>
+              </div>
+            )}
+
+            <div class="prose-portafolio mt-10 text-lg text-ink-muted">
+              <BackendContent />
+            </div>
+          </div>
+        </div>
+      )
+    }
   </article>
 </BaseLayout>
+
+<style>
+  .carousel-track {
+    scrollbar-width: none;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  document
+    .querySelectorAll<HTMLDivElement>("[data-carousel-track]")
+    .forEach((track) => {
+      const wrapper = track.parentElement;
+      wrapper
+        ?.querySelector("[data-carousel-prev]")
+        ?.addEventListener("click", () => {
+          track.scrollBy({ left: -track.clientWidth, behavior: "smooth" });
+        });
+      wrapper
+        ?.querySelector("[data-carousel-next]")
+        ?.addEventListener("click", () => {
+          track.scrollBy({ left: track.clientWidth, behavior: "smooth" });
+        });
+    });
+</script>
 
 <style is:global>
   /* Estilos de prosa para el Markdown. El paso 5 los afina. */
@@ -111,6 +238,15 @@ const { Content } = await render(proyecto);
     list-style: disc;
     padding-left: 1.5rem;
     margin-bottom: 1.25rem;
+  }
+
+  .prose-portafolio li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-portafolio strong {
+    color: var(--color-ink);
+    font-weight: 600;
   }
 
   .prose-portafolio code {
