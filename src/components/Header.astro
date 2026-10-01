@@ -1,11 +1,12 @@
 ---
-import { SITIO } from "../config";
-
 const enlaces = [
-  { href: "/#proyectos", texto: "Proyectos" },
   { href: "/#sobre-mi", texto: "Sobre mí" },
+  { href: "/#proyectos", texto: "Proyectos" },
   { href: "/#contacto", texto: "Contacto" },
 ];
+
+// "Inicio" solo tiene sentido fuera del inicio.
+const enInicio = Astro.url.pathname === "/";
 ---
 
 <header
@@ -15,12 +16,16 @@ const enlaces = [
     class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
     aria-label="Principal"
   >
-    <a
-      href="/"
-      class="font-display text-base font-bold tracking-tight whitespace-nowrap hover:text-accent-soft sm:text-lg"
-    >
-      {SITIO.nombre}
-    </a>
+    {
+      !enInicio && (
+        <a
+          href="/"
+          class="font-display text-base font-bold tracking-tight whitespace-nowrap hover:text-accent-soft sm:text-lg"
+        >
+          Inicio
+        </a>
+      )
+    }
 
     <button
       type="button"
@@ -28,7 +33,7 @@ const enlaces = [
       aria-expanded="false"
       aria-controls="menu-principal"
       aria-label="Abrir menú"
-      class="group flex size-11 items-center justify-center rounded-pill text-ink-muted transition hover:bg-surface hover:text-ink sm:hidden"
+      class="group ml-auto flex size-11 items-center justify-center rounded-pill text-ink-muted transition hover:bg-surface hover:text-ink sm:hidden"
     >
       <svg
         class="size-6 group-aria-expanded:hidden"
@@ -57,7 +62,7 @@ const enlaces = [
     <ul
       id="menu-principal"
       data-menu
-      class="absolute inset-x-0 top-full hidden flex-col border-b border-border/60 bg-bg/95 px-4 py-2 backdrop-blur-lg data-[open]:flex sm:static sm:flex sm:flex-row sm:items-center sm:gap-2 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none"
+      class="absolute inset-x-0 top-full hidden flex-col border-b border-border/60 bg-bg/95 px-4 py-2 backdrop-blur-lg data-[open]:flex sm:static sm:ml-auto sm:flex sm:flex-row sm:items-center sm:gap-2 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none"
     >
       {
         enlaces.map(({ href, texto }) => (

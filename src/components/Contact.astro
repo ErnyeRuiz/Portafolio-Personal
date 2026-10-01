@@ -1,0 +1,40 @@
+---
+import { SITIO } from "../config";
+
+const enlaces = [
+  { href: `mailto:${SITIO.email}`, texto: "Correo", primario: true },
+  { href: SITIO.github, texto: "GitHub ↗", primario: false },
+  { href: SITIO.linkedin, texto: "LinkedIn ↗", primario: false },
+];
+---
+
+<section id="contacto" class="scroll-mt-24 py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl px-6">
+    <header class="rise max-w-2xl">
+      <h2 class="text-3xl font-bold sm:text-4xl">Contacto</h2>
+      <p class="mt-4 text-lg text-ink-muted">
+        ¿Tienes un proyecto en mente o quieres conversar? Escríbeme.
+      </p>
+    </header>
+
+    <div class="mt-10 flex flex-wrap gap-4">
+      {
+        enlaces.map(({ href, texto, primario }) => (
+          <a
+            href={href}
+            target={primario ? undefined : "_blank"}
+            rel={primario ? undefined : "noopener noreferrer"}
+            class:list={[
+              "rounded-pill px-7 py-3.5 font-medium transition",
+              primario
+                ? "bg-accent text-bg hover:bg-accent-soft"
+                : "border border-border text-ink-muted hover:border-accent hover:text-ink",
+            ]}
+          >
+            {texto}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

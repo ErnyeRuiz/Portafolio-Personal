@@ -3,7 +3,9 @@ import { getCollection } from "astro:content";
 
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
 import ProjectGrid from "../components/ProjectGrid.astro";
+import Contact from "../components/Contact.astro";
 import { SITIO } from "../config";
 
 const proyectos = (
@@ -12,8 +14,8 @@ const proyectos = (
 ---
 
 <BaseLayout titulo={SITIO.titulo}>
-  <Hero />
+  <Hero slot="portada" />
+  <About />
   <ProjectGrid proyectos={proyectos} />
-
-  {/* TODO (paso 6): secciones Sobre mí y Contacto. */}
+  <Contact />
 </BaseLayout>

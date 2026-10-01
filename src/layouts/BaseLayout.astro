@@ -45,6 +45,10 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
       Saltar al contenido
     </a>
 
+    {/* La portada va antes del header: así la barra queda debajo de ella y
+        solo se pega arriba (sticky) al avanzar el scroll. */}
+    <slot name="portada" />
+
     <Header />
 
     <main id="contenido">
