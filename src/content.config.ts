@@ -27,7 +27,13 @@ const proyectos = defineCollection({
       destacado: z.boolean().default(false),
       repo: z.string().url().optional(),
       demo: z.string().url().optional(), // solo web
-      apk: z.string().url().optional(), // solo móvil
+      apk: z
+        .object({
+          url: z.string().url(),
+          tamano: z.string().optional(), // ej. "75 MB"
+          version: z.string().optional(), // ej. "1.0.0"
+        })
+        .optional(), // solo móvil
       video: z.string().url().optional(), // solo móvil
       draft: z.boolean().default(false),
     }),
