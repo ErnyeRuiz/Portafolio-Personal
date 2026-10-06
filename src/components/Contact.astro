@@ -70,15 +70,20 @@ const claseCampo =
             <div class="campo-salida flex flex-wrap items-center gap-4" style="--i: 3">
               <button
                 type="submit"
-                class="boton-enviar rounded-pill bg-accent px-7 py-3.5 font-medium text-bg transition hover:bg-accent-soft disabled:cursor-wait"
+                class="boton-enviar w-full rounded-pill bg-accent sm:w-auto px-7 py-3.5 font-medium text-bg transition hover:bg-accent-soft disabled:cursor-wait"
               >
                 <span class="boton-spinner" aria-hidden="true"></span>
                 <span class="boton-texto">Enviar mensaje</span>
               </button>
-              <div class="ml-auto flex flex-wrap gap-4">
+              <div class="flex w-full gap-4 sm:ml-auto sm:w-auto">
                 {
                   enlaces.map(({ href, texto }) => (
-                    <a href={href} target="_blank" rel="noopener noreferrer" class={claseEnlace}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class:list={[claseEnlace, "flex-1 text-center sm:flex-none"]}
+                    >
                       {texto}
                     </a>
                   ))
