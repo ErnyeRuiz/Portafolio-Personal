@@ -42,6 +42,7 @@ galeria:
     tipo: "movil"
 stack: ["Angular 21", "RxJS", "Signals", ".NET", "SQL"]
 rol: "Frontend"
+demo: "https://camping-place.vercel.app"
 fecha: 2026-05-18
 destacado: true
 ---
