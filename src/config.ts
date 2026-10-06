@@ -1,12 +1,11 @@
-/* Datos del sitio en un solo lugar.
-   TODO: reemplazar los valores marcados antes de publicar. */
+/* Datos del sitio en un solo lugar. */
 export const SITIO = {
   nombre: "Ernye Ruiz",
-  titulo: "Ernye Ruiz — Desarrollador de software",
+  titulo: "Ernye Ruiz — Desarrollador Full Stack",
   descripcion:
-    "Portafolio de proyectos web y móviles. Angular, Flutter y .NET.",
+    "Portafolio de Ernye Ruiz, desarrollador Full Stack. .NET, Angular, Flutter y SQL Server.",
   url: "https://portafolio-personal-phi-black.vercel.app",
   github: "https://github.com/ErnyeRuiz",
-  linkedin: "https://www.linkedin.com/in/usuario", // TODO: tu perfil
+  linkedin: "https://www.linkedin.com/in/ernye-ruiz-044a9b139",
   email: "ernye1010@gmail.com",
 } as const;
