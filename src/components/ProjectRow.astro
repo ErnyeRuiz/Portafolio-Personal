@@ -19,8 +19,8 @@ const etiquetaTipo = tipo === "web" ? "Web" : "Móvil";
 const enlaces = [
   { href: `/proyectos/${proyecto.id}`, texto: "Ver caso", principal: true },
   repo && { href: repo, texto: "Repositorio ↗", externo: true },
-  demo && { href: demo, texto: "Demo ↗", externo: true },
-  apk && { href: apk, texto: "Descargar APK ↓", externo: true },
+  demo && { href: demo, texto: "Visitar ↗", externo: true },
+  apk && { href: apk.url, texto: "Descargar APK ↓", externo: true },
 ].filter(Boolean) as {
   href: string;
   texto: string;
