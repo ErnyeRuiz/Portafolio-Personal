@@ -37,7 +37,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // Honeypot: los bots lo llenan, las personas no lo ven.
-  if (typeof datos.website === "string" && datos.website.trim() !== "") {
+  if (typeof datos.hp_campo === "string" && datos.hp_campo.trim() !== "") {
     return json({ ok: true });
   }
 
