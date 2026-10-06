@@ -1,6 +1,6 @@
 ---
 titulo: "CampingPlace"
-resumen: "Plataforma para descubrir campings en Costa Rica: reseñas, favoritos y viajes, con vista pública y panel de administración por permisos."
+resumen: "Plataforma para descubrir campings en Costa Rica: viajes, lugares favoritos y reseñas, provee vista pública y panel de administración."
 tipo: "web"
 portada: "../../assets/proyectos/camping-place/portada.png"
 galeria:
@@ -40,7 +40,7 @@ galeria:
   - src: "../../assets/proyectos/camping-place/mobile-mis-viajes.jpeg"
     alt: "Mis viajes — Móvil"
     tipo: "movil"
-stack: ["Angular 21", "TypeScript", "Signals", "RxJS", "Transloco"]
+stack: ["Angular 21", "RxJS", "Signals", ".NET", "SQL"]
 rol: "Frontend"
 fecha: 2026-05-18
 destacado: true
