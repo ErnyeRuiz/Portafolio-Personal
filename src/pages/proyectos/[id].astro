@@ -9,6 +9,7 @@ import { getImage } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DeviceFrame from "../../components/DeviceFrame.astro";
 import ActionLink from "../../components/ActionLink.astro";
+import QrDock from "../../components/QrDock.astro";
 import { SITIO } from "../../config";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -44,7 +45,26 @@ const ampliadas = await Promise.all(
   }),
 );
 
-const anchoSlide = (tipoCaptura: "web" | "movil") =>
+// El dock de QR ofrece los mismos destinos que los botones, para pasarlos al celular.
+const qrItems = [
+  apk && {
+    etiqueta: "APK",
+    href: apk.url,
+    descripcion: "Descargar el APK desde el celular",
+  },
+  demo && {
+    etiqueta: "Sitio",
+    href: demo,
+    descripcion: "Abrir el sitio desde el celular",
+  },
+  repo && {
+    etiqueta: "Repo",
+    href: repo,
+    descripcion: "Abrir el repositorio desde el celular",
+  },
+].filter((item): item is NonNullable<typeof item> => Boolean(item));
+
+const anchoSlide =(tipoCaptura: "web" | "movil") =>
   tipoCaptura === "web" ? "w-full" : "w-full md:w-[calc(50%-0.75rem)]";
 ---
 
@@ -85,31 +105,17 @@ const anchoSlide = (tipoCaptura: "web" | "movil") =>
       {
         (apk || demo || repo) && (
           <div class="mt-10 flex flex-col items-center gap-4 text-center">
-            <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+            <div class="flex flex-wrap items-center justify-center gap-4">
               {apk && (
                 <ActionLink
                   href={apk.url}
                   texto="Descargar APK ↓"
                   primario
                   descarga
-                  etiquetaQr="Código QR para descargar el APK desde el celular"
                 />
               )}
-              {demo && (
-                <ActionLink
-                  href={demo}
-                  texto="Visitar ↗"
-                  primario
-                  etiquetaQr="Código QR para abrir el sitio desde el celular"
-                />
-              )}
-              {repo && (
-                <ActionLink
-                  href={repo}
-                  texto="Repositorio ↗"
-                  etiquetaQr="Código QR del repositorio"
-                />
-              )}
+              {demo && <ActionLink href={demo} texto="Visitar ↗" primario />}
+              {repo && <ActionLink href={repo} texto="Repositorio ↗" />}
             </div>
             {apk && (
               <p class="max-w-md text-sm text-ink-muted">
@@ -124,6 +130,8 @@ const anchoSlide = (tipoCaptura: "web" | "movil") =>
         )
       }
     </div>
+
+    {qrItems.length > 0 && <QrDock items={qrItems} />}
 
     <div
       class="prose-portafolio mx-auto mt-16 max-w-3xl px-6 text-lg text-ink-muted"
