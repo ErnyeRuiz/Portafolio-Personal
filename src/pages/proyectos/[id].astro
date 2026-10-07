@@ -345,13 +345,47 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
     const count = dialog.querySelector("[data-lightbox-count]")!;
     let actual = 0;
 
-    const mostrar = (i: number) => {
+    const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let turno = 0;
+
+    const pintar = (i: number) => {
       actual = (i + ampliadas.length) % ampliadas.length;
       const { src, alt } = ampliadas[actual];
       img.src = src;
       img.alt = alt;
       caption.textContent = alt;
       count.textContent = `${actual + 1} / ${ampliadas.length}`;
+    };
+
+    // `dir` = 1 avanza, -1 retrocede: la captura actual sale hacia un lado y la
+    // nueva entra desde el contrario. Sin `dir` (apertura) cambia sin animar.
+    const mostrar = async (i: number, dir = 0) => {
+      const mio = ++turno;
+      if (!dir || sinMovimiento.matches || !dialog.open) return pintar(i);
+
+      img.getAnimations().forEach((a) => a.cancel());
+      const salida = img.animate(
+        [
+          { opacity: 1, transform: "translateX(0)" },
+          { opacity: 0, transform: `translateX(${-dir * 48}px)` },
+        ],
+        { duration: 140, easing: "ease-in", fill: "forwards" },
+      );
+      await salida.finished.catch(() => {});
+      if (mio !== turno) return;
+
+      pintar(i);
+      await img.decode().catch(() => {});
+      if (mio !== turno) return;
+
+      salida.cancel();
+      img.animate(
+        [
+          { opacity: 0, transform: `translateX(${dir * 48}px)` },
+          { opacity: 1, transform: "translateX(0)" },
+        ],
+        { duration: 220, easing: "ease-out" },
+      );
     };
 
     triggers.forEach((trigger) =>
@@ -370,10 +404,10 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
       ?.addEventListener("click", () => dialog.close());
     dialog
       .querySelector("[data-lightbox-prev]")
-      ?.addEventListener("click", () => mostrar(actual - 1));
+      ?.addEventListener("click", () => mostrar(actual - 1, -1));
     dialog
       .querySelector("[data-lightbox-next]")
-      ?.addEventListener("click", () => mostrar(actual + 1));
+      ?.addEventListener("click", () => mostrar(actual + 1, 1));
 
     // Click fuera de la imagen y los controles cierra el visor.
     dialog.addEventListener("click", (e) => {
@@ -382,8 +416,8 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
     });
 
     dialog.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") mostrar(actual - 1);
-      if (e.key === "ArrowRight") mostrar(actual + 1);
+      if (e.key === "ArrowLeft") mostrar(actual - 1, -1);
+      if (e.key === "ArrowRight") mostrar(actual + 1, 1);
     });
 
     // Swipe horizontal en pantallas táctiles.
@@ -397,7 +431,10 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
       "touchend",
       (e) => {
         const dx = e.changedTouches[0].clientX - inicioX;
-        if (Math.abs(dx) > 50) mostrar(actual + (dx < 0 ? 1 : -1));
+        if (Math.abs(dx) > 50) {
+          const dir = dx < 0 ? 1 : -1;
+          mostrar(actual + dir, dir);
+        }
       },
       { passive: true },
     );
