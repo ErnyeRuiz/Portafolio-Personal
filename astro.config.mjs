@@ -12,6 +12,9 @@ export default defineConfig({
   // Dominio de producción. Lo usan el sitemap y las URLs canónicas del <head>.
   site: 'https://portafolio-personal-phi-black.vercel.app',
 
+  // Oculta la barra de herramientas de Astro que aparece en `astro dev`.
+  devToolbar: { enabled: false },
+
   vite: {
     plugins: [tailwindcss()]
   },
