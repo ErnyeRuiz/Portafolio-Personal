@@ -8,6 +8,7 @@ import { getImage } from "astro:assets";
 
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DeviceFrame from "../../components/DeviceFrame.astro";
+import ActionLink from "../../components/ActionLink.astro";
 import { SITIO } from "../../config";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -84,35 +85,30 @@ const anchoSlide = (tipoCaptura: "web" | "movil") =>
       {
         (apk || demo || repo) && (
           <div class="mt-10 flex flex-col items-center gap-4 text-center">
-            <div class="flex flex-wrap items-center justify-center gap-3">
+            <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
               {apk && (
-                <a
+                <ActionLink
                   href={apk.url}
-                  download
-                  class="rounded-pill bg-accent px-6 py-3 font-medium text-bg transition hover:bg-accent-soft"
-                >
-                  Descargar APK ↓
-                </a>
+                  texto="Descargar APK ↓"
+                  primario
+                  descarga
+                  etiquetaQr="Código QR para descargar el APK desde el celular"
+                />
               )}
               {demo && (
-                <a
+                <ActionLink
                   href={demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="rounded-pill bg-accent px-6 py-3 font-medium text-bg transition hover:bg-accent-soft"
-                >
-                  Visitar ↗
-                </a>
+                  texto="Visitar ↗"
+                  primario
+                  etiquetaQr="Código QR para abrir el sitio desde el celular"
+                />
               )}
               {repo && (
-                <a
+                <ActionLink
                   href={repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="rounded-pill border border-border px-6 py-3 font-medium text-ink-muted transition hover:border-accent hover:text-ink"
-                >
-                  Repositorio ↗
-                </a>
+                  texto="Repositorio ↗"
+                  etiquetaQr="Código QR del repositorio"
+                />
               )}
             </div>
             {apk && (

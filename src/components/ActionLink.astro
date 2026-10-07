@@ -1,0 +1,58 @@
+---
+import QRCode from "qrcode";
+
+interface Props {
+  href: string;
+  texto: string;
+  primario?: boolean;
+  descarga?: boolean;
+  /** Texto accesible del QR, ej. "Escanear para descargar el APK". */
+  etiquetaQr: string;
+}
+
+const { href, texto, primario = false, descarga = false, etiquetaQr } =
+  Astro.props;
+
+/* El QR se genera en build: cero JS en el cliente y sin servicios externos.
+   Módulos oscuros sobre fondo claro (el QR necesita ese contraste para
+   escanearse, aunque el sitio sea oscuro). */
+const qr = await QRCode.toString(href, {
+  type: "svg",
+  margin: 0,
+  errorCorrectionLevel: "M",
+  color: { dark: "#0b0b12", light: "#ffffff" },
+});
+---
+
+<div class="flex items-center gap-4">
+  <a
+    href={href}
+    download={descarga || undefined}
+    target={descarga ? undefined : "_blank"}
+    rel={descarga ? undefined : "noopener noreferrer"}
+    class:list={[
+      "rounded-pill px-6 py-3 font-medium transition",
+      primario
+        ? "bg-accent text-bg hover:bg-accent-soft"
+        : "border border-border text-ink-muted hover:border-accent hover:text-ink",
+    ]}
+  >
+    {texto}
+  </a>
+
+  {/* Solo desde `md`: en un celular ya estás en el dispositivo destino. */}
+  <div
+    role="img"
+    aria-label={etiquetaQr}
+    class="qr hidden size-20 shrink-0 rounded-lg bg-white p-1.5 md:block"
+    set:html={qr}
+  />
+</div>
+
+<style>
+  .qr :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
