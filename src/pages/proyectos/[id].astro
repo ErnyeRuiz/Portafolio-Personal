@@ -347,6 +347,7 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
 
     const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
     let turno = 0;
+    let abiertoConTeclado = false;
 
     const pintar = (i: number) => {
       actual = (i + ampliadas.length) % ampliadas.length;
@@ -389,15 +390,23 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
     };
 
     triggers.forEach((trigger) =>
-      trigger.addEventListener("click", () => {
+      trigger.addEventListener("click", (e) => {
+        // detail === 0 es un "click" disparado por teclado (Enter/Espacio).
+        abiertoConTeclado = e.detail === 0;
         mostrar(Number(trigger.dataset.lightboxOpen));
         dialog.showModal();
         document.documentElement.style.overflow = "hidden";
       }),
     );
 
+    // Al cerrar, el navegador devuelve el foco al botón que abrió el visor; con
+    // Escape eso pinta el anillo de :focus-visible sobre la captura. Si se abrió
+    // con mouse/táctil lo soltamos; con teclado se conserva para no perder el foco.
     dialog.addEventListener("close", () => {
       document.documentElement.style.overflow = "";
+      if (!abiertoConTeclado && document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
     });
     dialog
       .querySelector("[data-lightbox-close]")
