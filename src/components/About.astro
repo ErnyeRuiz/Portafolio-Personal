@@ -9,8 +9,11 @@ const datos = ["T-SQL", "Stored procedures", "Modelado"];
 const tools = ["Git", "Azure DevOps", "Claude Code", "Azure CI/CD"];
 ---
 
-<section id="sobre-mi" class="scroll-mt-[10px] py-24 sm:py-32">
+{/* Las anclas van en el contenedor interno, no en la <section>: así quedan
+    dentro del padding y `scroll-padding-top` deja el contenido bajo el header. */}
+<section class="py-24 sm:py-32">
   <div
+    id="sobre-mi"
     class="mx-auto grid max-w-6xl items-center gap-14 px-6 lg:grid-cols-[1fr_1.35fr] lg:gap-16"
   >
     <!-- Presentación -->

@@ -28,11 +28,15 @@
   /* Formas */
   --radius-card: 18px;
   --radius-pill: 50px;
+
+  /* Alto del header pegajoso más un respiro: las anclas aterrizan debajo de él */
+  --header-h: 5rem;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--header-h);
   }
 
   body {
