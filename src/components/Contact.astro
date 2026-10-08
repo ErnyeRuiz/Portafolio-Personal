@@ -22,7 +22,8 @@ const claseCampo =
       </p>
     </header>
 
-    <div id="contacto-caja" data-fase="reposo" class="rise mt-10 max-w-xl">
+    <div class="mt-10 grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <div id="contacto-caja" data-fase="reposo" class="rise w-full max-w-xl">
       <div class="form-colapsable">
         <div class="form-colapsable-interior">
           <form id="form-contacto" class="grid gap-5" novalidate>
@@ -138,6 +139,22 @@ const claseCampo =
           }
         </div>
       </div>
+    </div>
+
+    <aside class="rise hidden lg:block">
+      <p class="font-display text-sm tracking-[0.2em] text-accent uppercase">
+        Correo directo
+      </p>
+      <a
+        href={`mailto:${SITIO.email}`}
+        class="mt-3 block font-display text-2xl font-bold break-all hover:text-accent-soft"
+      >
+        {SITIO.email}
+      </a>
+      <p class="mt-4 max-w-sm text-ink-muted">
+        Disponible para nuevos proyectos y oportunidades.
+      </p>
+    </aside>
     </div>
 
   </div>
