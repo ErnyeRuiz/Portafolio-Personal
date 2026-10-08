@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import ProjectRow from "./ProjectRow.astro";
+import ProjectCard from "./ProjectCard.astro";
 
 interface Props {
   proyectos: CollectionEntry<"proyectos">[];
@@ -12,9 +13,11 @@ const { proyectos } = Astro.props;
    Con pocos, filas anchas alternadas: cada proyecto ocupa la pantalla
    y el conjunto no se ve escaso. Al pasar de ~4, las filas se vuelven
    larguísimas y conviene cambiar a cuadrícula dejando las filas anchas
-   solo para los `destacado: true`. Ese cambio se hace acá y nada más. */
+   solo para los `destacado: true`. Ese cambio se hace aquí y nada más. */
 const UMBRAL_CUADRICULA = 4;
 const usarFilas = proyectos.length < UMBRAL_CUADRICULA;
+const destacados = proyectos.filter(({ data }) => data.destacado);
+const resto = proyectos.filter(({ data }) => !data.destacado);
 ---
 
 <section id="proyectos" class="glow-field glow-soft -scroll-mt-4 py-24 sm:-scroll-mt-14 sm:py-32">
@@ -34,12 +37,21 @@ const usarFilas = proyectos.length < UMBRAL_CUADRICULA;
           ))}
         </div>
       ) : (
-        /* TODO (cuando haya 4+): cuadrícula de 2 columnas con ProjectCard,
-           reservando ProjectRow para los destacados. */
-        <div class="grid gap-10 sm:grid-cols-2">
-          {proyectos.map((proyecto, i) => (
-            <ProjectRow proyecto={proyecto} indice={i} />
-          ))}
+        <div class="space-y-28 sm:space-y-36">
+          {destacados.length > 0 && (
+            <div class="space-y-28 sm:space-y-36">
+              {destacados.map((proyecto, i) => (
+                <ProjectRow proyecto={proyecto} indice={i} />
+              ))}
+            </div>
+          )}
+          {resto.length > 0 && (
+            <div class="grid gap-x-10 gap-y-16 sm:grid-cols-2">
+              {resto.map((proyecto) => (
+                <ProjectCard proyecto={proyecto} />
+              ))}
+            </div>
+          )}
         </div>
       )
     }
