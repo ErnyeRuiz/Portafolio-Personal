@@ -27,22 +27,43 @@ npm run dev      # http://localhost:4321
 | `npm run dev`     | Servidor de desarrollo                             |
 | `npm run build`   | Compila a `dist/`                                  |
 | `npm run preview` | Sirve lo compilado, para revisar antes de publicar |
+| `npm run check`   | Revisa tipos de `.astro` y `.ts` (`astro check`)   |
+| `npm test`        | Corre los tests con Vitest                         |
+| `npm run format`  | Formatea el repo con Prettier                      |
+
+El formulario de contacto necesita tres variables de entorno (ver
+`.env.example`): `BREVO_API_KEY`, `CONTACT_FROM_EMAIL` y `CONTACT_TO_EMAIL`.
+Se declaran en `astro.config.mjs` con `astro:env` y solo existen en el servidor.
 
 ## Estructura
 
 ```
 src/
-├─ config.ts                 Datos del sitio (nombre, redes, URL)
+├─ config.ts                 Datos del sitio (nombre, redes, correo)
 ├─ content.config.ts         Esquema de los proyectos
 ├─ content/proyectos/        Un .md por proyecto
 ├─ assets/proyectos/         Capturas (Astro las optimiza a WebP)
 ├─ styles/global.css         Tokens de diseño, glow y animaciones
-├─ layouts/BaseLayout.astro  <head>, SEO, header y footer
-├─ components/
+├─ layouts/BaseLayout.astro  <head>, SEO, Open Graph, header y footer
+├─ components/               Piezas de UI (Gallery, Lightbox, ProjectCard...)
+├─ scripts/                  Lógica del navegador (carrusel, visor)
+├─ lib/contacto/             Lógica del formulario, sin depender de Astro
+│  ├─ validar.ts             Validación pura (con tests)
+│  └─ brevo.ts               Envío del correo con Brevo
 └─ pages/
    ├─ index.astro
+   ├─ 404.astro
+   ├─ api/contacto.ts        Endpoint fino: origen → validar → enviar
    └─ proyectos/[id].astro   Página de detalle de cada proyecto
 ```
+
+## Tests
+
+La lógica que no depende de Astro vive en `src/lib/` y se prueba con Vitest
+(`npm test`). Hoy cubre la validación del formulario de contacto
+(`src/lib/contacto/validar.test.ts`): campos vacíos, largos máximos, correo
+inválido y honeypot. En cada push y PR a `development` y `main`, el CI corre
+`check`, `test` y `build`.
 
 ## Agregar un proyecto
 
