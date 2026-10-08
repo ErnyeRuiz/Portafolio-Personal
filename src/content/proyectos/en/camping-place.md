@@ -8,7 +8,7 @@ galeriaAlt:
   - "Explore campsites"
   - "Campsite visit detail"
   - "Favorites"
-  - "Trip with campsites"
+  - "Trip with multiple campsites"
   - "Profile"
   - "Manage my campsites"
   - "Add new campsite"
@@ -22,10 +22,10 @@ galeriaAlt:
 
 ## Description
 
-A web platform to discover camping sites in Costa Rica, with reviews, favorites and trip planning:
+A web platform to discover campsites in Costa Rica, with reviews, favorites and trip planning:
 
 - **Traveler:** searches for campsites, leaves reviews, saves favorites and builds trips combining several sites.
-- **Admin:** publishes and manages camping sites, their images, users, roles and permissions.
+- **Admin:** publishes and manages campsites, their images, users, roles and permissions.
 
 The system brings campsite search into one place with reliable information, instead of relying on listings scattered across social media, with a public view for visitors and an admin panel with permission-based access control.
 

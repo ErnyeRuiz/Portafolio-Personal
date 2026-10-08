@@ -157,8 +157,8 @@ const en: Record<keyof typeof es, string> = {
   "visor.etiqueta": "Screenshot viewer",
   "visor.cerrar": "Close viewer",
 
-  "qr.dock": "Take it to your phone",
-  "qr.boton": "Take it on your phone",
+  "qr.dock": "Open on your phone",
+  "qr.boton": "Open on your phone",
   "qr.escanea": "Scan with your phone",
   "qr.cerrar": "Close",
   "qr.apk": "APK",
