@@ -1,0 +1,207 @@
+---
+import QRCode from "qrcode";
+import { obtenerLang, useTranslations } from "../i18n/utils";
+
+interface Item {
+  /** Nombre corto de la pestaña, ej. "APK". */
+  etiqueta: string;
+  href: string;
+  /** Texto accesible y de apoyo del QR. */
+  descripcion: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+const t = useTranslations(obtenerLang(Astro.currentLocale));
+
+/* Los QR se generan en build: cero JS para dibujarlos y sin servicios
+   externos. Módulos oscuros sobre fondo claro (el QR necesita ese contraste
+   para escanearse, aunque el sitio sea oscuro). */
+const paneles = await Promise.all(
+  items.map(async (item) => ({
+    ...item,
+    qr: await QRCode.toString(item.href, {
+      type: "svg",
+      margin: 0,
+      errorCorrectionLevel: "M",
+      color: { dark: "#0b0b12", light: "#ffffff" },
+    }),
+  })),
+);
+---
+
+{/* Solo desde `md`: en un celular ya estás en el dispositivo destino. */}
+<aside
+  data-qr-dock
+  aria-label={t("qr.dock")}
+  class="fixed right-5 bottom-5 z-40 hidden md:block"
+>
+  <button
+    type="button"
+    data-qr-toggle
+    aria-expanded="false"
+    aria-controls="qr-dock-panel"
+    class="dock-pill flex items-center gap-2 rounded-pill border border-border bg-surface/90 px-4 py-2.5 text-sm font-medium text-ink shadow-lg shadow-black/40 backdrop-blur transition hover:border-accent"
+  >
+    <span aria-hidden="true">📱</span>
+    <span>{t("qr.boton")}</span>
+  </button>
+
+  <div
+    id="qr-dock-panel"
+    data-qr-panel
+    hidden
+    class="dock-panel w-72 rounded-card border border-border bg-surface/95 p-5 shadow-2xl shadow-black/50 backdrop-blur"
+  >
+    <div class="flex items-center justify-between gap-2">
+      <p class="text-sm font-medium text-ink">{t("qr.escanea")}</p>
+      <button
+        type="button"
+        data-qr-close
+        aria-label={t("qr.cerrar")}
+        class="flex size-8 items-center justify-center rounded-pill text-ink-muted transition hover:text-ink"
+      >
+        ✕
+      </button>
+    </div>
+
+    {paneles.length > 1 && (
+      <div role="tablist" class="mt-3 flex gap-1 rounded-pill bg-bg p-1">
+        {paneles.map((p, i) => (
+          <button
+            type="button"
+            role="tab"
+            data-qr-tab={i}
+            aria-selected={i === 0 ? "true" : "false"}
+            class="flex-1 rounded-pill px-3 py-1.5 text-xs font-medium text-ink-muted transition aria-selected:bg-accent aria-selected:text-bg"
+          >
+            {p.etiqueta}
+          </button>
+        ))}
+      </div>
+    )}
+
+    {paneles.map((p, i) => (
+      <div data-qr-item={i} hidden={i !== 0} class="mt-4">
+        <div
+          role="img"
+          aria-label={p.descripcion}
+          class="qr mx-auto aspect-square w-full rounded-lg bg-white p-3"
+          set:html={p.qr}
+        />
+        <p class="mt-3 text-center text-xs text-ink-muted">{p.descripcion}</p>
+      </div>
+    ))}
+  </div>
+</aside>
+
+<style>
+  .qr :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .dock-panel {
+    transform-origin: bottom right;
+  }
+
+  .dock-panel:not([hidden]),
+  .dock-pill:not([hidden]) {
+    animation: dock-in 0.16s ease-out;
+  }
+
+  @keyframes dock-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+
+  .dock-panel.cerrando {
+    animation: dock-out 0.16s ease-in forwards;
+    pointer-events: none;
+  }
+
+  @keyframes dock-out {
+    to {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dock-panel:not([hidden]),
+    .dock-pill:not([hidden]),
+    .dock-panel.cerrando {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const dock = document.querySelector<HTMLElement>("[data-qr-dock]");
+
+  if (dock) {
+    const toggle = dock.querySelector<HTMLButtonElement>("[data-qr-toggle]")!;
+    const panel = dock.querySelector<HTMLElement>("[data-qr-panel]")!;
+    const tabs = dock.querySelectorAll<HTMLButtonElement>("[data-qr-tab]");
+    const items = dock.querySelectorAll<HTMLElement>("[data-qr-item]");
+    const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const abrir = (abierto: boolean, enfocar = false) => {
+      toggle.setAttribute("aria-expanded", String(abierto));
+
+      if (abierto) {
+        // Reabrir a mitad de la salida cancela el cierre pendiente.
+        panel.classList.remove("cerrando");
+        panel.hidden = false;
+        toggle.hidden = true;
+        if (enfocar)
+          panel.querySelector<HTMLElement>("[data-qr-close]")?.focus();
+        return;
+      }
+
+      if (panel.hidden || panel.classList.contains("cerrando")) return;
+
+      // El panel se oculta de verdad recién al terminar la animación de salida.
+      const terminar = () => {
+        if (!panel.classList.contains("cerrando")) return;
+        panel.classList.remove("cerrando");
+        panel.hidden = true;
+        toggle.hidden = false;
+        if (enfocar) toggle.focus();
+      };
+
+      panel.classList.add("cerrando");
+      if (sinMovimiento.matches) terminar();
+      else panel.addEventListener("animationend", terminar, { once: true });
+    };
+
+    toggle.addEventListener("click", () => abrir(true, true));
+    dock
+      .querySelector("[data-qr-close]")
+      ?.addEventListener("click", () => abrir(false, true));
+    dock.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !panel.hidden) abrir(false, true);
+    });
+
+    // Clic fuera del dock lo recoge. No se mueve el foco: el usuario ya
+    // eligió dónde hacer clic.
+    document.addEventListener("click", (e) => {
+      if (!panel.hidden && !dock.contains(e.target as Node)) abrir(false);
+    });
+
+    tabs.forEach((tab, i) =>
+      tab.addEventListener("click", () => {
+        tabs.forEach((t, j) =>
+          t.setAttribute("aria-selected", String(j === i)),
+        );
+        items.forEach((item, j) => (item.hidden = j !== i));
+      }),
+    );
+  }
+</script>

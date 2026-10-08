@@ -22,17 +22,22 @@
   --color-ink-muted: #8fa3bf;
 
   /* Tipografía */
-  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
 
   /* Formas */
   --radius-card: 18px;
   --radius-pill: 50px;
+
+  /* Alto del header pegajoso más un respiro: las anclas aterrizan debajo de él */
+  --header-h: 5rem;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--header-h);
   }
 
   body {
@@ -82,24 +87,26 @@
   pointer-events: none;
   background:
     radial-gradient(
-      ellipse 55% 65% at 75% 35%,
+      ellipse 60rem 40rem at 75% 35%,
       rgb(14 165 233 / 0.28),
       transparent 70%
     ),
     radial-gradient(
-      ellipse 45% 55% at 8% 90%,
+      ellipse 50rem 35rem at 8% 90%,
       rgb(2 132 199 / 0.2),
       transparent 70%
     );
 }
 
-/* Variante suave para secciones interiores */
+/* Variante suave para secciones interiores. El centro baja a 15% y la máscara
+   desvanece el borde superior: sin ella el glow se corta en seco arriba. */
 .glow-soft::before {
   background: radial-gradient(
-    ellipse 60% 50% at 50% 0%,
+    ellipse 60% 50% at 50% 15%,
     rgb(14 165 233 / 0.14),
     transparent 70%
   );
+  mask-image: linear-gradient(transparent, #000 15%);
 }
 
 /* Borde con degradado, como las tarjetas de la referencia */
@@ -143,6 +150,212 @@
   animation-range: entry 0% cover 28%;
 }
 
+/* ---------------------------------------------------------------
+   Formulario de contacto: campos, envío y panel de éxito.
+   La fase vive en [data-fase] de #contacto-caja: reposo | enviando | exito.
+   --------------------------------------------------------------- */
+.input-campo {
+  transition:
+    border-color 0.2s,
+    box-shadow 0.25s,
+    background-color 0.2s;
+}
+
+.input-campo:hover {
+  border-color: rgb(14 165 233 / 0.45);
+}
+
+.input-campo:focus {
+  box-shadow:
+    0 0 0 3px rgb(14 165 233 / 0.18),
+    0 0 24px rgb(14 165 233 / 0.14);
+}
+
+/* Botón: ancho fijo para que "Enviando…" no cambie el layout */
+.boton-enviar {
+  position: relative;
+  display: inline-flex;
+  min-width: 11.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transform: translateY(0);
+  transition:
+    transform 0.2s,
+    box-shadow 0.25s,
+    background-color 0.2s;
+}
+
+.boton-enviar:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px -10px rgb(14 165 233 / 0.65);
+}
+
+.boton-spinner {
+  width: 0;
+  height: 1rem;
+  opacity: 0;
+  border: 2px solid rgb(10 15 30 / 0.25);
+  border-top-color: var(--color-bg);
+  border-radius: 9999px;
+  transition:
+    width 0.2s,
+    opacity 0.2s;
+}
+
+[data-fase="enviando"] .boton-spinner {
+  width: 1rem;
+  opacity: 1;
+  animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+[data-fase="enviando"] label.campo-salida {
+  opacity: 0.6;
+}
+
+/* Barrido: los campos salen en cascada y el contenedor colapsa */
+.form-colapsable {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.form-colapsable-interior {
+  min-height: 0;
+  overflow: hidden;
+  /* Evita recortar el glow del foco sin alterar el layout */
+  padding: 6px;
+  margin: -6px;
+}
+
+.campo-salida {
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.35s ease;
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+[data-fase="exito"] .campo-salida {
+  opacity: 0;
+  transform: translateY(-14px);
+  filter: blur(4px);
+}
+
+[data-fase="exito"] .form-colapsable {
+  grid-template-rows: 0fr;
+  transition-delay: 0.3s;
+}
+
+/* Error */
+.franja-error {
+  border: 1px solid rgb(244 114 182 / 0.5);
+  background: rgb(244 114 182 / 0.08);
+  color: var(--color-pop);
+  outline: none;
+}
+
+.franja-error:empty {
+  display: none;
+}
+
+.franja-error.shake {
+  animation: sacudir 0.35s ease-in-out;
+}
+
+@keyframes sacudir {
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+/* Panel de éxito */
+.panel-exito {
+  display: none;
+  outline: none;
+  box-shadow: 0 0 60px -20px rgb(14 165 233 / 0.45);
+}
+
+[data-fase="exito"] .panel-exito {
+  display: block;
+  animation: rise 0.7s 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.check-anillo,
+.check-trazo,
+.check-pulso {
+  stroke: var(--color-accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.check-trazo {
+  stroke: var(--color-accent-soft);
+}
+
+.check-anillo,
+.check-trazo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.check-pulso {
+  opacity: 0;
+  transform-origin: center;
+}
+
+[data-fase="exito"] .check-anillo {
+  animation: trazar 0.6s 0.6s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+[data-fase="exito"] .check-trazo {
+  animation: trazar 0.4s 1s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+[data-fase="exito"] .check-pulso {
+  animation: pulso 0.9s 1.1s ease-out both;
+}
+
+[data-fase="exito"] .panel-exito-titulo {
+  animation: rise 0.6s 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-fase="exito"] .panel-exito-texto {
+  animation: rise 0.6s 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes trazar {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pulso {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -156,5 +369,75 @@
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
   }
+
+  .boton-spinner,
+  .franja-error.shake,
+  [data-fase="exito"] .check-anillo,
+  [data-fase="exito"] .check-trazo,
+  [data-fase="exito"] .check-pulso,
+  [data-fase="exito"] .panel-exito-titulo,
+  [data-fase="exito"] .panel-exito-texto {
+    animation: none;
+  }
+
+  [data-fase="exito"] .panel-exito {
+    animation: none;
+  }
+
+  [data-fase="exito"] .campo-salida {
+    filter: none;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Prosa: estilos del Markdown de los proyectos y del backend.
+   --------------------------------------------------------------- */
+.prose-portafolio {
+  overflow-wrap: break-word;
+}
+
+.prose-portafolio h2 {
+  color: var(--color-ink);
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+.prose-portafolio p {
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+.prose-portafolio a {
+  color: var(--color-accent-soft);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.prose-portafolio ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose-portafolio li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-portafolio strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.prose-portafolio code {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
 }

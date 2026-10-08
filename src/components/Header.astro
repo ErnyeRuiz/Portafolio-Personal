@@ -1,40 +1,162 @@
 ---
 import { SITIO } from "../config";
+import {
+  obtenerLang,
+  otroIdioma,
+  rutaLocal,
+  useTranslations,
+} from "../i18n/utils";
 
+interface Props {
+  /** Misma página en el otro idioma. */
+  hrefOtroIdioma: string;
+}
+
+const { hrefOtroIdioma } = Astro.props;
+const lang = obtenerLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const otra = otroIdioma(lang);
+// El texto del selector va en el idioma de destino: `lang` y `hreflang`
+// lo declaran para que los lectores de pantalla lo pronuncien bien.
+const tOtra = useTranslations(otra);
+
+const inicio = rutaLocal(lang);
 const enlaces = [
-  { href: "/#proyectos", texto: "Proyectos" },
-  { href: "/#sobre-mi", texto: "Sobre mí" },
-  { href: "/#contacto", texto: "Contacto" },
+  { href: `${inicio}#sobre-mi`, texto: t("nav.sobreMi") },
+  { href: `${inicio}#proyectos`, texto: t("nav.proyectos") },
+  { href: `${inicio}#contacto`, texto: t("nav.contacto") },
 ];
 ---
 
-<header
-  class="sticky top-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur-lg"
->
+{/* El blur va en un ::before y no en el <header>: un backdrop-filter en el
+    ancestro hace que el blur del menú desplegable solo "vea" el header y no la
+    página, y el menú se ve transparente. */}
+<header class="sticky top-0 z-50 border-b border-border/60 before:absolute before:inset-0 before:-z-10 before:bg-bg/70 before:backdrop-blur-lg before:content-['']">
   <nav
-    class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"
-    aria-label="Principal"
+    class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
+    aria-label={t("nav.principal")}
   >
     <a
-      href="/"
-      class="font-display text-lg font-bold tracking-tight hover:text-accent-soft"
+      href={inicio}
+      data-marca
+      class="font-display text-base font-bold tracking-tight whitespace-nowrap hover:text-accent-soft sm:text-lg"
     >
       {SITIO.nombre}
     </a>
 
-    <ul class="flex items-center gap-1 sm:gap-2">
-      {
-        enlaces.map(({ href, texto }) => (
-          <li>
-            <a
-              href={href}
-              class="rounded-pill px-3 py-2 text-sm text-ink-muted transition hover:bg-surface hover:text-ink sm:px-4"
-            >
-              {texto}
-            </a>
-          </li>
-        ))
-      }
+    <button
+      type="button"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="menu-principal"
+      aria-label={t("nav.abrirMenu")}
+      data-etiqueta-abrir={t("nav.abrirMenu")}
+      data-etiqueta-cerrar={t("nav.cerrarMenu")}
+      class="group ml-auto flex size-11 items-center justify-center rounded-pill text-ink-muted transition hover:bg-surface hover:text-ink sm:hidden"
+    >
+      <svg
+        class="size-6 group-aria-expanded:hidden"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+      <svg
+        class="hidden size-6 group-aria-expanded:block"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+
+    <ul
+      id="menu-principal"
+      data-menu
+      class="absolute inset-x-0 top-full hidden flex-col border-b border-border/60 bg-bg/95 px-4 py-2 backdrop-blur-lg data-[open]:flex sm:static sm:ml-auto sm:flex sm:flex-row sm:items-center sm:gap-2 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none"
+    >
+      {enlaces.map(({ href, texto }) => (
+        <li>
+          <a
+            href={href}
+            class="block rounded-pill px-4 py-3 text-base text-ink-muted transition hover:bg-surface hover:text-ink sm:py-2 sm:text-sm"
+          >
+            {texto}
+          </a>
+        </li>
+      ))}
+      <li class="group relative">
+        <a
+          href={hrefOtroIdioma}
+          hreflang={otra}
+          lang={otra}
+          aria-label={tOtra("idioma.cambiar")}
+          class="peer block rounded-pill px-4 py-3 text-base font-medium text-ink-muted transition hover:bg-surface hover:text-ink sm:border sm:border-border sm:py-2 sm:text-sm"
+        >
+          {tOtra("idioma.codigo")}
+        </a>
+        <!-- Tooltip visual: el aria-label ya lo anuncia, por eso va oculto a lectores. -->
+        <span
+          aria-hidden="true"
+          lang={otra}
+          class="pointer-events-none absolute top-full right-0 mt-2 hidden whitespace-nowrap rounded-md border border-border bg-surface px-3 py-1.5 text-xs text-ink opacity-0 shadow-lg transition sm:block group-hover:opacity-100 peer-focus-visible:opacity-100"
+        >
+          {tOtra("idioma.cambiar")}
+        </span>
+      </li>
     </ul>
   </nav>
 </header>
+
+<script>
+  const boton = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-menu]");
+
+  const fijarAbierto = (abierto: boolean) => {
+    if (!boton || !menu) return;
+    menu.toggleAttribute("data-open", abierto);
+    boton.setAttribute("aria-expanded", String(abierto));
+    boton.setAttribute(
+      "aria-label",
+      (abierto ? boton.dataset.etiquetaCerrar : boton.dataset.etiquetaAbrir) ??
+        "",
+    );
+  };
+
+  boton?.addEventListener("click", () =>
+    fijarAbierto(boton.getAttribute("aria-expanded") !== "true"),
+  );
+  // En la portada la marca no recarga: sube al inicio de la página.
+  const marca = document.querySelector<HTMLAnchorElement>("[data-marca]");
+  const sinBarra = (ruta: string) => ruta.replace(/\/$/, "");
+  marca?.addEventListener("click", (e) => {
+    // La marca apunta al inicio del idioma actual ("/" o "/en/").
+    if (sinBarra(window.location.pathname) !== sinBarra(marca.pathname)) return;
+    e.preventDefault();
+    fijarAbierto(false);
+    window.scrollTo({ top: 0 });
+  });
+  // Un enlace lleva a un ancla: el menú se cierra para no tapar la sección.
+  menu?.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).closest("a")) fijarAbierto(false);
+  });
+  document.addEventListener("keydown", (e) => {
+    // Solo actúa con el menú abierto: si no, robaría el foco a un input o diálogo.
+    if (e.key === "Escape" && menu?.hasAttribute("data-open")) {
+      fijarAbierto(false);
+      boton?.focus();
+    }
+  });
+  // Al pasar a escritorio el menú vuelve a ser la barra horizontal.
+  window
+    .matchMedia("(min-width: 40rem)")
+    .addEventListener("change", (e) => e.matches && fijarAbierto(false));
+</script>

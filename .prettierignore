@@ -1,0 +1,11 @@
+dist/
+.astro/
+.vercel/
+.atl/
+.codegraph/
+.claude/
+node_modules/
+package-lock.json
+PLAN.md
+AGENTS.md
+CLAUDE.md
