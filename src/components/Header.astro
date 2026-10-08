@@ -93,16 +93,24 @@ const enlaces = [
           </a>
         </li>
       ))}
-      <li>
+      <li class="group relative">
         <a
           href={hrefOtroIdioma}
           hreflang={otra}
           lang={otra}
           aria-label={tOtra("idioma.cambiar")}
-          class="block rounded-pill px-4 py-3 text-base font-medium text-ink-muted transition hover:bg-surface hover:text-ink sm:border sm:border-border sm:py-2 sm:text-sm"
+          class="peer block rounded-pill px-4 py-3 text-base font-medium text-ink-muted transition hover:bg-surface hover:text-ink sm:border sm:border-border sm:py-2 sm:text-sm"
         >
           {tOtra("idioma.codigo")}
         </a>
+        <!-- Tooltip visual: el aria-label ya lo anuncia, por eso va oculto a lectores. -->
+        <span
+          aria-hidden="true"
+          lang={otra}
+          class="pointer-events-none absolute top-full right-0 mt-2 hidden whitespace-nowrap rounded-md border border-border bg-surface px-3 py-1.5 text-xs text-ink opacity-0 shadow-lg transition sm:block group-hover:opacity-100 peer-focus-visible:opacity-100"
+        >
+          {tOtra("idioma.cambiar")}
+        </span>
       </li>
     </ul>
   </nav>
