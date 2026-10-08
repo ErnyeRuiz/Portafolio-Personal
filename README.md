@@ -2,7 +2,7 @@
 
 # Portafolio personal
 
-Sitio donde publico mis proyectos. Estático, sin base de
+Sitio donde publico mis proyectos, desarrollado con asistencia de Claude Code. Estático, sin base de
 datos: cada proyecto es un archivo Markdown y publicar uno nuevo es hacer commit.
 
 **Sitio:** https://portafolio-personal-phi-black.vercel.app ·
