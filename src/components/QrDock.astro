@@ -66,37 +66,33 @@ const paneles = await Promise.all(
       </button>
     </div>
 
-    {
-      paneles.length > 1 && (
-        <div role="tablist" class="mt-3 flex gap-1 rounded-pill bg-bg p-1">
-          {paneles.map((p, i) => (
-            <button
-              type="button"
-              role="tab"
-              data-qr-tab={i}
-              aria-selected={i === 0 ? "true" : "false"}
-              class="flex-1 rounded-pill px-3 py-1.5 text-xs font-medium text-ink-muted transition aria-selected:bg-accent aria-selected:text-bg"
-            >
-              {p.etiqueta}
-            </button>
-          ))}
-        </div>
-      )
-    }
+    {paneles.length > 1 && (
+      <div role="tablist" class="mt-3 flex gap-1 rounded-pill bg-bg p-1">
+        {paneles.map((p, i) => (
+          <button
+            type="button"
+            role="tab"
+            data-qr-tab={i}
+            aria-selected={i === 0 ? "true" : "false"}
+            class="flex-1 rounded-pill px-3 py-1.5 text-xs font-medium text-ink-muted transition aria-selected:bg-accent aria-selected:text-bg"
+          >
+            {p.etiqueta}
+          </button>
+        ))}
+      </div>
+    )}
 
-    {
-      paneles.map((p, i) => (
-        <div data-qr-item={i} hidden={i !== 0} class="mt-4">
-          <div
-            role="img"
-            aria-label={p.descripcion}
-            class="qr mx-auto aspect-square w-full rounded-lg bg-white p-3"
-            set:html={p.qr}
-          />
-          <p class="mt-3 text-center text-xs text-ink-muted">{p.descripcion}</p>
-        </div>
-      ))
-    }
+    {paneles.map((p, i) => (
+      <div data-qr-item={i} hidden={i !== 0} class="mt-4">
+        <div
+          role="img"
+          aria-label={p.descripcion}
+          class="qr mx-auto aspect-square w-full rounded-lg bg-white p-3"
+          set:html={p.qr}
+        />
+        <p class="mt-3 text-center text-xs text-ink-muted">{p.descripcion}</p>
+      </div>
+    ))}
   </div>
 </aside>
 
@@ -162,7 +158,8 @@ const paneles = await Promise.all(
         panel.classList.remove("cerrando");
         panel.hidden = false;
         toggle.hidden = true;
-        if (enfocar) panel.querySelector<HTMLElement>("[data-qr-close]")?.focus();
+        if (enfocar)
+          panel.querySelector<HTMLElement>("[data-qr-close]")?.focus();
         return;
       }
 
@@ -198,7 +195,9 @@ const paneles = await Promise.all(
 
     tabs.forEach((tab, i) =>
       tab.addEventListener("click", () => {
-        tabs.forEach((t, j) => t.setAttribute("aria-selected", String(j === i)));
+        tabs.forEach((t, j) =>
+          t.setAttribute("aria-selected", String(j === i)),
+        );
         items.forEach((item, j) => (item.hidden = j !== i));
       }),
     );

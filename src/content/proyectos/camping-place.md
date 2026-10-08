@@ -58,7 +58,7 @@ El sistema centraliza la búsqueda de campings en un solo lugar con información
 
 ## Detalles técnicos
 
-El frontend sigue una arquitectura por *features* standalone (sin NgModules), con una capa `core` que concentra servicios, guards e interceptors transversales, `features` con lazy-loading por dominio y `shared` para componentes reutilizables.
+El frontend sigue una arquitectura por _features_ standalone (sin NgModules), con una capa `core` que concentra servicios, guards e interceptors transversales, `features` con lazy-loading por dominio y `shared` para componentes reutilizables.
 
 - **State management:** Angular Signals en vez de NgRx — `AuthService` expone un signal de solo lectura para el usuario autenticado con un `computed` `isLoggedIn`, cada servicio HTTP tiene su propio signal `loading`, y un `LoadingService` centraliza el contador global que alimenta el loader compartido.
 - **Navegación:** guards funcionales (`CanActivateFn`) que se componen (`canActivate: [authGuard, adminSectionGuard]`), con rutas lazy por feature y parámetros de ruta bindeados directo a signal inputs (`input.required({ transform: numberAttribute })`) sin suscribirse a `ActivatedRoute`.

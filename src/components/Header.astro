@@ -11,9 +11,7 @@ const enlaces = [
 {/* El blur va en un ::before y no en el <header>: un backdrop-filter en el
     ancestro hace que el blur del menú desplegable solo "vea" el header y no la
     página, y el menú se ve transparente. */}
-<header
-  class="sticky top-0 z-50 border-b border-border/60 before:absolute before:inset-0 before:-z-10 before:bg-bg/70 before:backdrop-blur-lg before:content-['']"
->
+<header class="sticky top-0 z-50 border-b border-border/60 before:absolute before:inset-0 before:-z-10 before:bg-bg/70 before:backdrop-blur-lg before:content-['']">
   <nav
     class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
     aria-label="Principal"
@@ -63,26 +61,22 @@ const enlaces = [
       data-menu
       class="absolute inset-x-0 top-full hidden flex-col border-b border-border/60 bg-bg/95 px-4 py-2 backdrop-blur-lg data-[open]:flex sm:static sm:ml-auto sm:flex sm:flex-row sm:items-center sm:gap-2 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none"
     >
-      {
-        enlaces.map(({ href, texto }) => (
-          <li>
-            <a
-              href={href}
-              class="block rounded-pill px-4 py-3 text-base text-ink-muted transition hover:bg-surface hover:text-ink sm:py-2 sm:text-sm"
-            >
-              {texto}
-            </a>
-          </li>
-        ))
-      }
+      {enlaces.map(({ href, texto }) => (
+        <li>
+          <a
+            href={href}
+            class="block rounded-pill px-4 py-3 text-base text-ink-muted transition hover:bg-surface hover:text-ink sm:py-2 sm:text-sm"
+          >
+            {texto}
+          </a>
+        </li>
+      ))}
     </ul>
   </nav>
 </header>
 
 <script>
-  const boton = document.querySelector<HTMLButtonElement>(
-    "[data-menu-toggle]",
-  );
+  const boton = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
   const menu = document.querySelector<HTMLElement>("[data-menu]");
 
   const fijarAbierto = (abierto: boolean) => {

@@ -11,8 +11,7 @@ export interface MensajeContacto {
 
 /** `spam` marca el honeypot: se descarta sin avisar al bot. */
 export type Resultado<T> =
-  | { ok: true; valor: T }
-  | { ok: false; error: string; spam?: boolean };
+  { ok: true; valor: T } | { ok: false; error: string; spam?: boolean };
 
 const texto = (valor: unknown) => String(valor ?? "").trim();
 

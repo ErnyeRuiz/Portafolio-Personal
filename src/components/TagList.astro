@@ -12,23 +12,19 @@ const { rol, stack, fondo = "surface", class: clase } = Astro.props;
 ---
 
 <ul class:list={["flex flex-wrap gap-2", clase]}>
-  {
-    rol && (
-      <li class="rounded-pill border border-accent/40 bg-accent/10 px-3 py-1 text-sm text-accent-soft">
-        {rol}
-      </li>
-    )
-  }
-  {
-    stack.map((tec) => (
-      <li
-        class:list={[
-          "rounded-pill border border-border px-3 py-1 text-sm text-ink-muted",
-          fondo === "surface" ? "bg-surface" : "bg-bg",
-        ]}
-      >
-        {tec}
-      </li>
-    ))
-  }
+  {rol && (
+    <li class="rounded-pill border border-accent/40 bg-accent/10 px-3 py-1 text-sm text-accent-soft">
+      {rol}
+    </li>
+  )}
+  {stack.map((tec) => (
+    <li
+      class:list={[
+        "rounded-pill border border-border px-3 py-1 text-sm text-ink-muted",
+        fondo === "surface" ? "bg-surface" : "bg-bg",
+      ]}
+    >
+      {tec}
+    </li>
+  ))}
 </ul>

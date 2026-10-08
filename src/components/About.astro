@@ -1,7 +1,17 @@
 ---
 const cliente = [
-  { sigla: "NG", nombre: "Angular", detalle: "TypeScript", color: "var(--color-pop)" },
-  { sigla: "FL", nombre: "Flutter", detalle: "Dart · móvil", color: "var(--color-accent)" },
+  {
+    sigla: "NG",
+    nombre: "Angular",
+    detalle: "TypeScript",
+    color: "var(--color-pop)",
+  },
+  {
+    sigla: "FL",
+    nombre: "Flutter",
+    detalle: "Dart · móvil",
+    color: "var(--color-accent)",
+  },
 ];
 
 const api = ["Clean Architecture", "CQRS", "Web API"];
@@ -19,21 +29,23 @@ const tools = ["Git", "Azure DevOps", "Claude Code", "Azure CI/CD"];
     <!-- Presentación -->
     <header class="rise">
       <div class="flex items-center gap-5">
-        <div class="monograma" aria-hidden="true">ER</div>
-        <h2 class="text-3xl font-bold sm:text-4xl">
-          Ernye Ruiz Cerdas
-        </h2>
+        <div class="monograma" aria-hidden="true">
+          ER
+        </div>
+        <h2 class="text-3xl font-bold sm:text-4xl">Ernye Ruiz Cerdas</h2>
       </div>
 
       <p class="mt-6 max-w-md text-lg leading-relaxed text-ink-muted">
-        Soy un desarrollador apasionado por la programación y la arquitectura de sistemas. 
-        Me gusta especialmente trabajar en la lógica del backend aunque también disfruto el 
-        desarrollo frontend y móvil. Me motiva aprender nuevas tecnologías, 
-        afrontar desafíos y colaborar con equipos de desarrollo.
-      </p> 
+        Soy un desarrollador apasionado por la programación y la arquitectura de
+        sistemas. Me gusta especialmente trabajar en la lógica del backend
+        aunque también disfruto el desarrollo frontend y móvil. Me motiva
+        aprender nuevas tecnologías, afrontar desafíos y colaborar con equipos
+        de desarrollo.
+      </p>
       <p class="mt-6 max-w-md text-lg leading-relaxed text-ink-muted">
-        Cuando no estoy frente a la pantalla, suelo hacer actividad física, compartir tiempo 
-        con mis seres queridos y fortalecer mi relación con Dios.
+        Cuando no estoy frente a la pantalla, suelo hacer actividad física,
+        compartir tiempo con mis seres queridos y fortalecer mi relación con
+        Dios.
       </p>
     </header>
 
@@ -42,33 +54,41 @@ const tools = ["Git", "Azure DevOps", "Claude Code", "Azure CI/CD"];
       <div class="fila">
         <p class="etiqueta">Cliente</p>
         <div class="grid gap-3 sm:grid-cols-2">
-          {
-            cliente.map((c) => (
-              <div class="tarjeta flex items-center gap-4" style={`--c:${c.color}`}>
-                <span class="icono">{c.sigla}</span>
-                <div>
-                  <p class="font-display text-xl font-semibold">{c.nombre}</p>
-                  <p class="text-ink-muted">{c.detalle}</p>
-                </div>
+          {cliente.map((c) => (
+            <div
+              class="tarjeta flex items-center gap-4"
+              style={`--c:${c.color}`}
+            >
+              <span class="icono">{c.sigla}</span>
+              <div>
+                <p class="font-display text-xl font-semibold">{c.nombre}</p>
+                <p class="text-ink-muted">{c.detalle}</p>
               </div>
-            ))
-          }
+            </div>
+          ))}
         </div>
       </div>
 
       <div class="fila">
         <span class="hidden sm:block"></span>
-        <p class="conector" style="--c:var(--color-accent)">REST</p>
+        <p class="conector" style="--c:var(--color-accent)">
+          REST
+        </p>
       </div>
 
       <div class="fila">
         <p class="etiqueta">API</p>
-        <div class="tarjeta flex items-center gap-4" style="--c:var(--color-accent-deep)">
+        <div
+          class="tarjeta flex items-center gap-4"
+          style="--c:var(--color-accent-deep)"
+        >
           <span class="icono">.NET</span>
           <div>
             <p class="font-display text-xl font-semibold">.NET · C#</p>
             <ul class="mt-2 flex flex-wrap gap-2">
-              {api.map((t) => <li class="chip">{t}</li>)}
+              {api.map((t) => (
+                <li class="chip">{t}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -76,12 +96,17 @@ const tools = ["Git", "Azure DevOps", "Claude Code", "Azure CI/CD"];
 
       <div class="fila">
         <span class="hidden sm:block"></span>
-        <p class="conector" style="--c:var(--color-accent-soft)">EF Core</p>
+        <p class="conector" style="--c:var(--color-accent-soft)">
+          EF Core
+        </p>
       </div>
 
       <div class="fila">
         <p class="etiqueta">Datos</p>
-        <div class="tarjeta flex items-center gap-4" style="--c:var(--color-accent-soft)">
+        <div
+          class="tarjeta flex items-center gap-4"
+          style="--c:var(--color-accent-soft)"
+        >
           <span class="icono" aria-hidden="true">
             <svg
               viewBox="0 0 24 24"
@@ -100,7 +125,9 @@ const tools = ["Git", "Azure DevOps", "Claude Code", "Azure CI/CD"];
           <div>
             <p class="font-display text-xl font-semibold">SQL Server</p>
             <ul class="mt-2 flex flex-wrap gap-2">
-              {datos.map((t) => <li class="chip">{t}</li>)}
+              {datos.map((t) => (
+                <li class="chip">{t}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -109,13 +136,11 @@ const tools = ["Git", "Azure DevOps", "Claude Code", "Azure CI/CD"];
       <div class="fila mt-2">
         <p class="etiqueta">Tools</p>
         <ul class="flex flex-wrap gap-2">
-          {
-            tools.map((t) => (
-              <li class="rounded-pill border border-border px-4 py-1.5 text-ink-muted">
-                {t}
-              </li>
-            ))
-          }
+          {tools.map((t) => (
+            <li class="rounded-pill border border-border px-4 py-1.5 text-ink-muted">
+              {t}
+            </li>
+          ))}
         </ul>
       </div>
     </div>

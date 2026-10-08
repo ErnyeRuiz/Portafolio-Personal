@@ -29,31 +29,29 @@ const resto = proyectos.filter(({ data }) => !data.destacado);
       </p>
     </header>
 
-    {
-      usarFilas ? (
-        <div class="space-y-28 sm:space-y-36">
-          {proyectos.map((proyecto, i) => (
-            <ProjectRow proyecto={proyecto} indice={i} />
-          ))}
-        </div>
-      ) : (
-        <div class="space-y-28 sm:space-y-36">
-          {destacados.length > 0 && (
-            <div class="space-y-28 sm:space-y-36">
-              {destacados.map((proyecto, i) => (
-                <ProjectRow proyecto={proyecto} indice={i} />
-              ))}
-            </div>
-          )}
-          {resto.length > 0 && (
-            <div class="grid gap-x-10 gap-y-16 sm:grid-cols-2">
-              {resto.map((proyecto) => (
-                <ProjectCard proyecto={proyecto} />
-              ))}
-            </div>
-          )}
-        </div>
-      )
-    }
+    {usarFilas ? (
+      <div class="space-y-28 sm:space-y-36">
+        {proyectos.map((proyecto, i) => (
+          <ProjectRow proyecto={proyecto} indice={i} />
+        ))}
+      </div>
+    ) : (
+      <div class="space-y-28 sm:space-y-36">
+        {destacados.length > 0 && (
+          <div class="space-y-28 sm:space-y-36">
+            {destacados.map((proyecto, i) => (
+              <ProjectRow proyecto={proyecto} indice={i} />
+            ))}
+          </div>
+        )}
+        {resto.length > 0 && (
+          <div class="grid gap-x-10 gap-y-16 sm:grid-cols-2">
+            {resto.map((proyecto) => (
+              <ProjectCard proyecto={proyecto} />
+            ))}
+          </div>
+        )}
+      </div>
+    )}
   </div>
 </section>

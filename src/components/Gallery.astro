@@ -32,29 +32,27 @@ const claseFlecha =
       aria-label="Galería de capturas"
       class="carousel-track flex items-start snap-x transition-[height] duration-300 snap-mandatory gap-6 overflow-x-auto overflow-y-hidden scroll-smooth"
     >
-      {
-        galeria.map((item, i) => (
-          <figure
-            class:list={[anchoSlide(item.tipo ?? tipo), "flex-none snap-start"]}
+      {galeria.map((item, i) => (
+        <figure
+          class:list={[anchoSlide(item.tipo ?? tipo), "flex-none snap-start"]}
+        >
+          <button
+            type="button"
+            data-lightbox-open={i}
+            aria-label={`Ampliar: ${item.alt}`}
+            class="block w-full cursor-zoom-in rounded-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
           >
-            <button
-              type="button"
-              data-lightbox-open={i}
-              aria-label={`Ampliar: ${item.alt}`}
-              class="block w-full cursor-zoom-in rounded-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-            >
-              <DeviceFrame
-                tipo={item.tipo ?? tipo}
-                src={item.src}
-                alt={item.alt}
-              />
-            </button>
-            <figcaption class="mt-3 text-center text-sm text-ink-muted">
-              {item.alt}
-            </figcaption>
-          </figure>
-        ))
-      }
+            <DeviceFrame
+              tipo={item.tipo ?? tipo}
+              src={item.src}
+              alt={item.alt}
+            />
+          </button>
+          <figcaption class="mt-3 text-center text-sm text-ink-muted">
+            {item.alt}
+          </figcaption>
+        </figure>
+      ))}
     </div>
 
     <button
@@ -80,8 +78,7 @@ const claseFlecha =
     data-carousel-count
     aria-live="polite"
     class="mt-4 flex h-10 items-center justify-center text-center text-sm text-ink-muted tabular-nums"
-  >
-  </p>
+  ></p>
 </div>
 
 <style>

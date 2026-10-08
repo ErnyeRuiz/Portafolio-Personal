@@ -22,7 +22,8 @@
   --color-ink-muted: #8fa3bf;
 
   /* Tipografía */
-  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
 
   /* Formas */

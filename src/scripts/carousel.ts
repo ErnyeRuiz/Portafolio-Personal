@@ -5,8 +5,12 @@ const UMBRAL_COMPLETA = 0.99;
 
 export function iniciarCarrusel(raiz: HTMLElement) {
   const track = raiz.querySelector<HTMLElement>("[data-carousel-track]");
-  const anterior = raiz.querySelector<HTMLButtonElement>("[data-carousel-prev]");
-  const siguiente = raiz.querySelector<HTMLButtonElement>("[data-carousel-next]");
+  const anterior = raiz.querySelector<HTMLButtonElement>(
+    "[data-carousel-prev]",
+  );
+  const siguiente = raiz.querySelector<HTMLButtonElement>(
+    "[data-carousel-next]",
+  );
   const contador = raiz.querySelector("[data-carousel-count]");
   if (!track) return;
 

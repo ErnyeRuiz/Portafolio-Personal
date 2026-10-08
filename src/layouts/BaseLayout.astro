@@ -16,8 +16,11 @@ interface Props {
   imagen?: ImageMetadata;
 }
 
-const { titulo, descripcion = SITIO.descripcion, imagen = ogPorDefecto } =
-  Astro.props;
+const {
+  titulo,
+  descripcion = SITIO.descripcion,
+  imagen = ogPorDefecto,
+} = Astro.props;
 const canonica = new URL(Astro.url.pathname, Astro.site);
 
 // Las vistas previas piden 1200 px de ancho y no aceptan formatos modernos.
