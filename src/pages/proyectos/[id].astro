@@ -68,7 +68,9 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
   tipoCaptura === "web" ? "w-full" : "w-full md:w-[calc(50%-0.75rem)]";
 ---
 
-<BaseLayout titulo={`${titulo} — ${SITIO.nombre}`} descripcion={resumen}>
+{/* La portada de un proyecto móvil es vertical y las redes la recortan mal:
+    esos proyectos usan la imagen genérica del sitio. */}
+<BaseLayout titulo={`${titulo} — ${SITIO.nombre}`} descripcion={resumen} imagen={tipo === "web" ? portada : undefined}>
   <article class="glow-field py-20">
     <div class="mx-auto max-w-3xl px-6">
       <a
