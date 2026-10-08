@@ -80,41 +80,41 @@ const enlaces = [
 </header>
 
 <script>
-  const toggle = document.querySelector<HTMLButtonElement>(
+  const boton = document.querySelector<HTMLButtonElement>(
     "[data-menu-toggle]",
   );
   const menu = document.querySelector<HTMLElement>("[data-menu]");
 
-  const setOpen = (abierto: boolean) => {
-    if (!toggle || !menu) return;
+  const fijarAbierto = (abierto: boolean) => {
+    if (!boton || !menu) return;
     menu.toggleAttribute("data-open", abierto);
-    toggle.setAttribute("aria-expanded", String(abierto));
-    toggle.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
+    boton.setAttribute("aria-expanded", String(abierto));
+    boton.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
   };
 
-  toggle?.addEventListener("click", () =>
-    setOpen(toggle.getAttribute("aria-expanded") !== "true"),
+  boton?.addEventListener("click", () =>
+    fijarAbierto(boton.getAttribute("aria-expanded") !== "true"),
   );
   // En la portada la marca no recarga: sube al inicio de la página.
   document.querySelector("[data-marca]")?.addEventListener("click", (e) => {
     if (window.location.pathname !== "/") return;
     e.preventDefault();
-    setOpen(false);
+    fijarAbierto(false);
     window.scrollTo({ top: 0 });
   });
   // Un enlace lleva a un ancla: el menú se cierra para no tapar la sección.
   menu?.addEventListener("click", (e) => {
-    if ((e.target as HTMLElement).closest("a")) setOpen(false);
+    if ((e.target as HTMLElement).closest("a")) fijarAbierto(false);
   });
   document.addEventListener("keydown", (e) => {
     // Solo actúa con el menú abierto: si no, robaría el foco a un input o diálogo.
     if (e.key === "Escape" && menu?.hasAttribute("data-open")) {
-      setOpen(false);
-      toggle?.focus();
+      fijarAbierto(false);
+      boton?.focus();
     }
   });
   // Al pasar a escritorio el menú vuelve a ser la barra horizontal.
   window
     .matchMedia("(min-width: 40rem)")
-    .addEventListener("change", (e) => e.matches && setOpen(false));
+    .addEventListener("change", (e) => e.matches && fijarAbierto(false));
 </script>
