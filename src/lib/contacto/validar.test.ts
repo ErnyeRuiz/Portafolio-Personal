@@ -33,7 +33,7 @@ describe("validarContacto", () => {
     (campo) => {
       for (const vacio of ["", "   ", undefined]) {
         const r = validarContacto({ ...valido, [campo]: vacio });
-        expect(r).toEqual({ ok: false, error: "Completa todos los campos." });
+        expect(r).toEqual({ ok: false, error: "campos_incompletos" });
       }
     },
   );
@@ -49,7 +49,7 @@ describe("validarContacto", () => {
       validarContacto({ ...valido, [campo]: "a".repeat(max + 1) }),
     ).toEqual({
       ok: false,
-      error: "El mensaje es demasiado largo.",
+      error: "mensaje_largo",
     });
   });
 
@@ -60,7 +60,7 @@ describe("validarContacto", () => {
     ).toMatchObject({ ok: true });
     expect(validarContacto({ ...valido, email: `a${local}@x.co` })).toEqual({
       ok: false,
-      error: "El mensaje es demasiado largo.",
+      error: "mensaje_largo",
     });
   });
 
@@ -69,7 +69,7 @@ describe("validarContacto", () => {
     (email) => {
       expect(validarContacto({ ...valido, email })).toEqual({
         ok: false,
-        error: "El correo no es válido.",
+        error: "email_invalido",
       });
     },
   );
@@ -77,7 +77,7 @@ describe("validarContacto", () => {
   it("marca como spam cuando el honeypot viene lleno", () => {
     expect(validarContacto({ ...valido, hp_campo: "soy un bot" })).toEqual({
       ok: false,
-      error: "",
+      error: "solicitud_invalida",
       spam: true,
     });
   });

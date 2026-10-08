@@ -39,5 +39,20 @@ export default defineConfig({
   // El sitio es estático; solo /api/contacto corre como función serverless.
   adapter: vercel(),
 
-  integrations: [sitemap()],
+  // Español en la raíz, inglés bajo /en/. Sin redirección automática por idioma
+  // del navegador: cada URL sirve siempre el mismo idioma.
+  i18n: {
+    locales: ["es", "en"],
+    defaultLocale: "es",
+    routing: { prefixDefaultLocale: false },
+  },
+
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: "es",
+        locales: { es: "es-ES", en: "en-US" },
+      },
+    }),
+  ],
 });

@@ -1,5 +1,6 @@
 ---
 import QRCode from "qrcode";
+import { obtenerLang, useTranslations } from "../i18n/utils";
 
 interface Item {
   /** Nombre corto de la pestaña, ej. "APK". */
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const { items } = Astro.props;
+const t = useTranslations(obtenerLang(Astro.currentLocale));
 
 /* Los QR se generan en build: cero JS para dibujarlos y sin servicios
    externos. Módulos oscuros sobre fondo claro (el QR necesita ese contraste
@@ -34,7 +36,7 @@ const paneles = await Promise.all(
 {/* Solo desde `md`: en un celular ya estás en el dispositivo destino. */}
 <aside
   data-qr-dock
-  aria-label="Llevar al celular"
+  aria-label={t("qr.dock")}
   class="fixed right-5 bottom-5 z-40 hidden md:block"
 >
   <button
@@ -45,7 +47,7 @@ const paneles = await Promise.all(
     class="dock-pill flex items-center gap-2 rounded-pill border border-border bg-surface/90 px-4 py-2.5 text-sm font-medium text-ink shadow-lg shadow-black/40 backdrop-blur transition hover:border-accent"
   >
     <span aria-hidden="true">📱</span>
-    <span>Llévalo en tu celular</span>
+    <span>{t("qr.boton")}</span>
   </button>
 
   <div
@@ -55,11 +57,11 @@ const paneles = await Promise.all(
     class="dock-panel w-72 rounded-card border border-border bg-surface/95 p-5 shadow-2xl shadow-black/50 backdrop-blur"
   >
     <div class="flex items-center justify-between gap-2">
-      <p class="text-sm font-medium text-ink">Escanea con tu celular</p>
+      <p class="text-sm font-medium text-ink">{t("qr.escanea")}</p>
       <button
         type="button"
         data-qr-close
-        aria-label="Cerrar"
+        aria-label={t("qr.cerrar")}
         class="flex size-8 items-center justify-center rounded-pill text-ink-muted transition hover:text-ink"
       >
         ✕

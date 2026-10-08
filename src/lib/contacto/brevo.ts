@@ -39,11 +39,11 @@ export async function enviarConBrevo(
 
     if (!respuesta.ok) {
       console.error("Contacto: Brevo respondió", respuesta.status);
-      return { ok: false, error: "No se pudo enviar el mensaje." };
+      return { ok: false, error: "envio_fallido" };
     }
     return { ok: true, valor: null };
   } catch (error) {
     console.error("Contacto: falló la llamada a Brevo", error);
-    return { ok: false, error: "No se pudo enviar el mensaje." };
+    return { ok: false, error: "envio_fallido" };
   }
 }

@@ -1,0 +1,19 @@
+---
+import type { GetStaticPaths } from "astro";
+
+import Proyecto from "../../../views/Proyecto.astro";
+import {
+  rutasProyectos,
+  type Proyecto as ProyectoDatos,
+} from "../../../lib/proyectos";
+
+interface Props {
+  proyecto: ProyectoDatos;
+}
+
+export const getStaticPaths: GetStaticPaths = () => rutasProyectos("en");
+
+const { proyecto } = Astro.props;
+---
+
+<Proyecto proyecto={proyecto} />

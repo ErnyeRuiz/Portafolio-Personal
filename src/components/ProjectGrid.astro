@@ -1,13 +1,15 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import ProjectRow from "./ProjectRow.astro";
 import ProjectCard from "./ProjectCard.astro";
+import type { Proyecto } from "../lib/proyectos";
+import { obtenerLang, useTranslations } from "../i18n/utils";
 
 interface Props {
-  proyectos: CollectionEntry<"proyectos">[];
+  proyectos: Proyecto[];
 }
 
 const { proyectos } = Astro.props;
+const t = useTranslations(obtenerLang(Astro.currentLocale));
 
 /* Este componente decide el layout según cuántos proyectos haya.
    Con pocos, filas anchas alternadas: cada proyecto ocupa la pantalla
@@ -23,10 +25,8 @@ const resto = proyectos.filter(({ data }) => !data.destacado);
 <section class="glow-field glow-soft py-24 sm:py-32">
   <div id="proyectos" class="mx-auto max-w-6xl px-6">
     <header class="rise mb-16 max-w-2xl">
-      <h2 class="text-3xl font-bold sm:text-4xl">Proyectos</h2>
-      <p class="mt-4 text-lg text-ink-muted">
-        Lo que he desarrollado y mis conocimientos técnicos.
-      </p>
+      <h2 class="text-3xl font-bold sm:text-4xl">{t("proyectos.titulo")}</h2>
+      <p class="mt-4 text-lg text-ink-muted">{t("proyectos.intro")}</p>
     </header>
 
     {usarFilas ? (

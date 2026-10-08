@@ -2,8 +2,11 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
+// Cada idioma vive en su carpeta. `es` trae los datos completos; `en` solo lo
+// traducible (ver `proyectosEn` y `backendEn`). Los ids son iguales en ambos
+// (ej. "camping-place"). `src/lib/proyectos.ts` los une y valida la paridad.
 const proyectos = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/proyectos" }),
+  loader: glob({ pattern: "**/*.md", base: "./src/content/proyectos/es" }),
   schema: ({ image }) =>
     z.object({
       titulo: z.string(),
@@ -39,10 +42,22 @@ const proyectos = defineCollection({
     }),
 });
 
+// Solo los campos traducibles de un proyecto. `galeriaAlt` va en el mismo
+// orden que `galeria` del archivo en español.
+const proyectosEn = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/proyectos/en" }),
+  schema: z.object({
+    titulo: z.string(),
+    resumen: z.string().max(160),
+    rol: z.string().optional(),
+    galeriaAlt: z.array(z.string()).default([]),
+  }),
+});
+
 // Un archivo por proyecto, con el mismo id que su contraparte en
-// `proyectos` (ej. "camping-place"), para poder cruzarlos en [id].astro.
+// `proyectos` (ej. "camping-place"), para poder cruzarlos en la página.
 const backend = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/backend" }),
+  loader: glob({ pattern: "**/*.md", base: "./src/content/backend/es" }),
   schema: z.object({
     arquitectura: z.string(), // ej. "Clean Architecture + CQRS"
     stack: z.array(z.string()),
@@ -50,4 +65,11 @@ const backend = defineCollection({
   }),
 });
 
-export const collections = { proyectos, backend };
+const backendEn = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/backend/en" }),
+  schema: z.object({
+    arquitectura: z.string().optional(), // si falta, se usa la del español
+  }),
+});
+
+export const collections = { proyectos, proyectosEn, backend, backendEn };

@@ -25,14 +25,14 @@ const origenPermitido = (request: Request, site: URL | undefined) => {
 
 export const POST: APIRoute = async ({ request, site }) => {
   if (!origenPermitido(request, site)) {
-    return json({ ok: false, error: "Origen no permitido." }, 403);
+    return json({ ok: false, error: "origen_no_permitido" }, 403);
   }
 
   let datos: unknown;
   try {
     datos = await request.json();
   } catch {
-    return json({ ok: false, error: "Solicitud inválida." }, 400);
+    return json({ ok: false, error: "solicitud_invalida" }, 400);
   }
 
   const validado = validarContacto(datos);

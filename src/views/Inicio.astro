@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
+import ProjectGrid from "../components/ProjectGrid.astro";
+import Contact from "../components/Contact.astro";
+import { obtenerProyectos } from "../lib/proyectos";
+import { obtenerLang, useTranslations } from "../i18n/utils";
+
+// Cuerpo de la portada, compartido por `/` y `/en/`: el idioma sale de la URL.
+const lang = obtenerLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const proyectos = await obtenerProyectos(lang);
+---
+
+<BaseLayout titulo={t("sitio.titulo")}>
+  <Hero slot="portada" />
+  <About />
+  <ProjectGrid proyectos={proyectos} />
+  <Contact />
+</BaseLayout>

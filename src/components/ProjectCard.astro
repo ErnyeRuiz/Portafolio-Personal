@@ -1,21 +1,32 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import DeviceFrame from "./DeviceFrame.astro";
 import ActionLink from "./ActionLink.astro";
 import TagList from "./TagList.astro";
+import type { Proyecto } from "../lib/proyectos";
+import { obtenerLang, rutaLocal, useTranslations } from "../i18n/utils";
 
 interface Props {
-  proyecto: CollectionEntry<"proyectos">;
+  proyecto: Proyecto;
 }
 
 const { proyecto } = Astro.props;
 const { titulo, resumen, tipo, portada, stack, rol } = proyecto.data;
-const href = `/proyectos/${proyecto.id}`;
+const lang = obtenerLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const href = rutaLocal(lang, `proyectos/${proyecto.id}`);
 ---
 
 <article class="rise flex flex-col gap-6">
-  <a href={href} class="group block" aria-label={`Ver el caso de ${titulo}`}>
-    <DeviceFrame tipo={tipo} src={portada} alt={`Captura de ${titulo}`} />
+  <a
+    href={href}
+    class="group block"
+    aria-label={t("proyectos.verCasoDe", { titulo })}
+  >
+    <DeviceFrame
+      tipo={tipo}
+      src={portada}
+      alt={t("proyectos.capturaDe", { titulo })}
+    />
   </a>
 
   <div class="flex flex-1 flex-col">
@@ -32,7 +43,7 @@ const href = `/proyectos/${proyecto.id}`;
     <div class="mt-auto pt-6">
       <ActionLink
         href={href}
-        texto="Ver caso →"
+        texto={t("proyectos.verCaso")}
         variante="primario"
         class="inline-block"
       />

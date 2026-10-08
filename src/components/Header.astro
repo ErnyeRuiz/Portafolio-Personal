@@ -1,10 +1,30 @@
 ---
 import { SITIO } from "../config";
+import {
+  obtenerLang,
+  otroIdioma,
+  rutaLocal,
+  useTranslations,
+} from "../i18n/utils";
 
+interface Props {
+  /** Misma página en el otro idioma. */
+  hrefOtroIdioma: string;
+}
+
+const { hrefOtroIdioma } = Astro.props;
+const lang = obtenerLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const otra = otroIdioma(lang);
+// El texto del selector va en el idioma de destino: `lang` y `hreflang`
+// lo declaran para que los lectores de pantalla lo pronuncien bien.
+const tOtra = useTranslations(otra);
+
+const inicio = rutaLocal(lang);
 const enlaces = [
-  { href: "/#sobre-mi", texto: "Sobre mí" },
-  { href: "/#proyectos", texto: "Proyectos" },
-  { href: "/#contacto", texto: "Contacto" },
+  { href: `${inicio}#sobre-mi`, texto: t("nav.sobreMi") },
+  { href: `${inicio}#proyectos`, texto: t("nav.proyectos") },
+  { href: `${inicio}#contacto`, texto: t("nav.contacto") },
 ];
 ---
 
@@ -14,10 +34,10 @@ const enlaces = [
 <header class="sticky top-0 z-50 border-b border-border/60 before:absolute before:inset-0 before:-z-10 before:bg-bg/70 before:backdrop-blur-lg before:content-['']">
   <nav
     class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
-    aria-label="Principal"
+    aria-label={t("nav.principal")}
   >
     <a
-      href="/"
+      href={inicio}
       data-marca
       class="font-display text-base font-bold tracking-tight whitespace-nowrap hover:text-accent-soft sm:text-lg"
     >
@@ -29,7 +49,9 @@ const enlaces = [
       data-menu-toggle
       aria-expanded="false"
       aria-controls="menu-principal"
-      aria-label="Abrir menú"
+      aria-label={t("nav.abrirMenu")}
+      data-etiqueta-abrir={t("nav.abrirMenu")}
+      data-etiqueta-cerrar={t("nav.cerrarMenu")}
       class="group ml-auto flex size-11 items-center justify-center rounded-pill text-ink-muted transition hover:bg-surface hover:text-ink sm:hidden"
     >
       <svg
@@ -71,6 +93,17 @@ const enlaces = [
           </a>
         </li>
       ))}
+      <li>
+        <a
+          href={hrefOtroIdioma}
+          hreflang={otra}
+          lang={otra}
+          aria-label={tOtra("idioma.cambiar")}
+          class="block rounded-pill px-4 py-3 text-base font-medium text-ink-muted transition hover:bg-surface hover:text-ink sm:border sm:border-border sm:py-2 sm:text-sm"
+        >
+          {tOtra("idioma.codigo")}
+        </a>
+      </li>
     </ul>
   </nav>
 </header>
@@ -83,15 +116,22 @@ const enlaces = [
     if (!boton || !menu) return;
     menu.toggleAttribute("data-open", abierto);
     boton.setAttribute("aria-expanded", String(abierto));
-    boton.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
+    boton.setAttribute(
+      "aria-label",
+      (abierto ? boton.dataset.etiquetaCerrar : boton.dataset.etiquetaAbrir) ??
+        "",
+    );
   };
 
   boton?.addEventListener("click", () =>
     fijarAbierto(boton.getAttribute("aria-expanded") !== "true"),
   );
   // En la portada la marca no recarga: sube al inicio de la página.
-  document.querySelector("[data-marca]")?.addEventListener("click", (e) => {
-    if (window.location.pathname !== "/") return;
+  const marca = document.querySelector<HTMLAnchorElement>("[data-marca]");
+  const sinBarra = (ruta: string) => ruta.replace(/\/$/, "");
+  marca?.addEventListener("click", (e) => {
+    // La marca apunta al inicio del idioma actual ("/" o "/en/").
+    if (sinBarra(window.location.pathname) !== sinBarra(marca.pathname)) return;
     e.preventDefault();
     fijarAbierto(false);
     window.scrollTo({ top: 0 });

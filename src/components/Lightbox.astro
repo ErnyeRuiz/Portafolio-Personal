@@ -1,12 +1,14 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getImage } from "astro:assets";
+import { obtenerLang, useTranslations } from "../i18n/utils";
 
 interface Props {
   galeria: CollectionEntry<"proyectos">["data"]["galeria"];
 }
 
 const { galeria } = Astro.props;
+const t = useTranslations(obtenerLang(Astro.currentLocale));
 
 // Versión grande de cada captura para el visor, sin agrandar el original.
 const ampliadas = await Promise.all(
@@ -23,14 +25,14 @@ const ampliadas = await Promise.all(
 <dialog
   data-lightbox
   data-items={JSON.stringify(ampliadas)}
-  aria-label="Visor de capturas"
+  aria-label={t("visor.etiqueta")}
   class="lightbox m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-0 text-ink"
 >
   <div class="flex h-full flex-col items-center justify-center gap-4 px-4 py-6 sm:px-16">
     <button
       type="button"
       data-lightbox-close
-      aria-label="Cerrar visor"
+      aria-label={t("visor.cerrar")}
       class="absolute right-4 top-4 z-10 flex size-11 items-center justify-center rounded-pill border border-border bg-bg/70 text-xl text-ink-muted backdrop-blur transition hover:border-accent hover:text-ink"
     >
       ✕
@@ -38,7 +40,7 @@ const ampliadas = await Promise.all(
     <button
       type="button"
       data-lightbox-prev
-      aria-label="Captura anterior"
+      aria-label={t("galeria.anterior")}
       class="absolute left-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-pill border border-border bg-bg/70 text-2xl text-ink-muted backdrop-blur transition hover:border-accent hover:text-ink sm:left-5"
     >
       ‹
@@ -46,7 +48,7 @@ const ampliadas = await Promise.all(
     <button
       type="button"
       data-lightbox-next
-      aria-label="Siguiente captura"
+      aria-label={t("galeria.siguiente")}
       class="absolute right-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-pill border border-border bg-bg/70 text-2xl text-ink-muted backdrop-blur transition hover:border-accent hover:text-ink sm:right-5"
     >
       ›

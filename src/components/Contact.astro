@@ -1,6 +1,20 @@
 ---
 import { SITIO } from "../config";
 import ActionLink from "./ActionLink.astro";
+import { obtenerLang, useTranslations } from "../i18n/utils";
+
+const t = useTranslations(obtenerLang(Astro.currentLocale));
+
+// Textos de error para el script del navegador, por código de la API.
+const errores = {
+  solicitud_invalida: t("error.solicitud_invalida"),
+  campos_incompletos: t("error.campos_incompletos"),
+  mensaje_largo: t("error.mensaje_largo"),
+  email_invalido: t("error.email_invalido"),
+  origen_no_permitido: t("error.origen_no_permitido"),
+  envio_fallido: t("error.envio_fallido"),
+  conexion: t("error.conexion"),
+};
 
 const enlaces = [
   { href: SITIO.github, texto: "GitHub ↗" },
@@ -14,19 +28,24 @@ const claseCampo =
 <section class="py-24 sm:py-32">
   <div id="contacto" class="mx-auto max-w-6xl px-6">
     <header class="rise max-w-2xl">
-      <h2 class="text-3xl font-bold sm:text-4xl">Contacto</h2>
-      <p class="mt-4 text-lg text-ink-muted">
-        ¿Tienes un proyecto en mente o quieres conversar? Escríbeme.
-      </p>
+      <h2 class="text-3xl font-bold sm:text-4xl">{t("contacto.titulo")}</h2>
+      <p class="mt-4 text-lg text-ink-muted">{t("contacto.intro")}</p>
     </header>
 
     <div class="mt-10 grid gap-12 lg:grid-cols-2 lg:gap-16">
-      <div id="contacto-caja" data-fase="reposo" class="rise w-full max-w-xl">
+      <div
+        id="contacto-caja"
+        data-fase="reposo"
+        data-texto-enviar={t("contacto.enviar")}
+        data-texto-enviando={t("contacto.enviando")}
+        data-errores={JSON.stringify(errores)}
+        class="rise w-full max-w-xl"
+      >
         <div class="form-colapsable">
           <div class="form-colapsable-interior">
             <form id="form-contacto" class="grid gap-5" novalidate>
               <label class="campo-salida grid gap-2" style="--i: 0">
-                <span class="text-ink-muted">Nombre</span>
+                <span class="text-ink-muted">{t("contacto.nombre")}</span>
                 <input
                   type="text"
                   name="nombre"
@@ -38,7 +57,7 @@ const claseCampo =
               </label>
 
               <label class="campo-salida grid gap-2" style="--i: 1">
-                <span class="text-ink-muted">Correo</span>
+                <span class="text-ink-muted">{t("contacto.correo")}</span>
                 <input
                   type="email"
                   name="email"
@@ -49,7 +68,7 @@ const claseCampo =
               </label>
 
               <label class="campo-salida grid gap-2" style="--i: 2">
-                <span class="text-ink-muted">Mensaje</span>
+                <span class="text-ink-muted">{t("contacto.mensaje")}</span>
                 <textarea
                   name="mensaje"
                   required
@@ -62,7 +81,7 @@ const claseCampo =
               <!-- Honeypot: oculto para personas, los bots lo llenan. -->
               <div class="absolute -left-[9999px]" aria-hidden="true">
                 <label>
-                  No completar
+                  {t("contacto.honeypot")}
                   <input
                     type="text"
                     name="hp_campo"
@@ -89,7 +108,7 @@ const claseCampo =
                   class="boton-enviar w-full rounded-pill bg-accent sm:w-auto px-7 py-3.5 font-medium text-bg transition hover:bg-accent-soft disabled:cursor-wait"
                 >
                   <span class="boton-spinner" aria-hidden="true"></span>
-                  <span class="boton-texto">Enviar mensaje</span>
+                  <span class="boton-texto">{t("contacto.enviar")}</span>
                 </button>
                 <div class="flex w-full gap-4 sm:ml-auto sm:w-auto">
                   {enlaces.map((enlace) => (
@@ -141,17 +160,17 @@ const claseCampo =
             ></path>
           </svg>
           <h3 class="panel-exito-titulo mt-6 text-2xl font-bold">
-            ¡Mensaje enviado!
+            {t("contacto.exitoTitulo")}
           </h3>
           <p class="panel-exito-texto mt-2 text-ink-muted">
-            Te responderé pronto.
+            {t("contacto.exitoTexto")}
           </p>
           <button
             type="button"
             id="form-otro"
             class="panel-exito-texto mt-6 rounded-pill border border-border px-6 py-3 font-medium text-ink-muted transition hover:border-accent hover:text-ink"
           >
-            Enviar otro mensaje
+            {t("contacto.otro")}
           </button>
           <div class="panel-exito-texto mt-8 flex flex-wrap justify-start gap-4 border-t border-border pt-6">
             {enlaces.map((enlace) => (
@@ -163,7 +182,7 @@ const claseCampo =
 
       <aside class="rise hidden lg:block">
         <p class="font-display text-sm tracking-[0.2em] text-accent uppercase">
-          Correo directo
+          {t("contacto.correoDirecto")}
         </p>
         <a
           href={`mailto:${SITIO.email}`}
@@ -172,7 +191,7 @@ const claseCampo =
           {SITIO.email}
         </a>
         <p class="mt-4 max-w-sm text-ink-muted">
-          Disponible para nuevos proyectos y oportunidades.
+          {t("contacto.disponible")}
         </p>
       </aside>
     </div>
@@ -187,6 +206,12 @@ const claseCampo =
   const panel = document.querySelector<HTMLElement>("#form-exito");
   const otro = document.querySelector<HTMLButtonElement>("#form-otro");
   const textoBoton = document.querySelector<HTMLElement>(".boton-texto");
+  // Los textos llegan traducidos desde el servidor, en atributos data-*.
+  const textoEnviar = caja?.dataset.textoEnviar ?? "";
+  const textoEnviando = caja?.dataset.textoEnviando ?? "";
+  const errores: Record<string, string> = JSON.parse(
+    caja?.dataset.errores ?? "{}",
+  );
 
   const campos = () =>
     form
@@ -221,7 +246,7 @@ const claseCampo =
     const body = JSON.stringify(Object.fromEntries(new FormData(form)));
 
     caja.dataset.fase = "enviando";
-    if (textoBoton) textoBoton.textContent = "Enviando…";
+    if (textoBoton) textoBoton.textContent = textoEnviando;
     const boton = form.querySelector<HTMLButtonElement>("button[type=submit]");
     if (boton) boton.disabled = true;
     campos().forEach((c) => (c.readOnly = true));
@@ -238,13 +263,13 @@ const claseCampo =
       if (res.ok && datos.ok) {
         exito = true;
       } else {
-        mostrarError(datos.error ?? "No se pudo enviar el mensaje.");
+        mostrarError(errores[datos.error] ?? errores.envio_fallido);
       }
     } catch {
-      mostrarError("Error de conexión. Intenta de nuevo.");
+      mostrarError(errores.conexion);
     }
 
-    if (textoBoton) textoBoton.textContent = "Enviar mensaje";
+    if (textoBoton) textoBoton.textContent = textoEnviar;
     if (boton) boton.disabled = false;
     campos().forEach((c) => (c.readOnly = false));
 

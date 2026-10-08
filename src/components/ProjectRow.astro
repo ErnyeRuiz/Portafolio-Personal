@@ -1,11 +1,12 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import DeviceFrame from "./DeviceFrame.astro";
 import ActionLink from "./ActionLink.astro";
 import TagList from "./TagList.astro";
+import type { Proyecto } from "../lib/proyectos";
+import { obtenerLang, rutaLocal, useTranslations } from "../i18n/utils";
 
 interface Props {
-  proyecto: CollectionEntry<"proyectos">;
+  proyecto: Proyecto;
   indice: number;
 }
 
@@ -19,29 +20,33 @@ const { proyecto, indice } = Astro.props;
 const { titulo, resumen, tipo, portada, stack, rol, repo, demo, apk } =
   proyecto.data;
 
+const lang = obtenerLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const href = rutaLocal(lang, `proyectos/${proyecto.id}`);
+
 /* Filas alternadas: la imagen cambia de lado en cada proyecto. */
 const imagenDerecha = indice % 2 === 1;
 const numero = String(indice + 1).padStart(2, "0");
-const etiquetaTipo = tipo === "web" ? "Frontend" : "Mobile";
+const etiquetaTipo = t(tipo === "web" ? "proyectos.tipoWeb" : "proyectos.tipoMovil");
 
 const externos = [
-  repo && { href: repo, texto: "Repositorio ↗" },
-  demo && { href: demo, texto: "Visitar ↗" },
-  apk && { href: apk.url, texto: "Descargar APK ↓", descarga: true },
+  repo && { href: repo, texto: t("accion.repositorio") },
+  demo && { href: demo, texto: t("accion.visitar") },
+  apk && { href: apk.url, texto: t("accion.descargarApk"), descarga: true },
 ].filter((enlace): enlace is Enlace => Boolean(enlace));
 ---
 
 <article class="rise grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
   <a
-    href={`/proyectos/${proyecto.id}`}
+    href={href}
     class="group block"
     class:list={[imagenDerecha && "lg:order-2"]}
-    aria-label={`Ver el caso de ${titulo}`}
+    aria-label={t("proyectos.verCasoDe", { titulo })}
   >
     <DeviceFrame
       tipo={tipo}
       src={portada}
-      alt={`Captura de ${titulo}`}
+      alt={t("proyectos.capturaDe", { titulo })}
       eager={indice === 0}
     />
   </a>
@@ -52,7 +57,7 @@ const externos = [
     </p>
 
     <h3 class="mt-3 text-4xl font-bold sm:text-5xl">
-      <a href={`/proyectos/${proyecto.id}`} class="hover:text-accent-soft">
+      <a href={href} class="hover:text-accent-soft">
         {titulo}
       </a>
     </h3>
@@ -63,8 +68,8 @@ const externos = [
 
     <div class="mt-8 flex flex-wrap items-center gap-3">
       <ActionLink
-        href={`/proyectos/${proyecto.id}`}
-        texto="Ver caso →"
+        href={href}
+        texto={t("proyectos.verCaso")}
         variante="primario"
       />
       {externos.map((enlace) => (

@@ -2,23 +2,27 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ActionLink from "../components/ActionLink.astro";
 import { SITIO } from "../config";
+import { obtenerLang, rutaLocal, useTranslations } from "../i18n/utils";
+
+// Vercel sirve este único 404 para cualquier URL desconocida, también bajo
+// /en/, así que se renderiza una sola vez en el idioma por defecto.
+const lang = obtenerLang(Astro.currentLocale);
+const t = useTranslations(lang);
 ---
 
-<BaseLayout titulo={`Página no encontrada — ${SITIO.nombre}`}>
+<BaseLayout titulo={`${t("404.titulo")} — ${SITIO.nombre}`} sinAlternas>
   <section class="glow-field flex min-h-[70dvh] items-center py-24">
     <div class="mx-auto max-w-3xl px-6">
       <p class="font-display text-sm tracking-[0.2em] text-accent uppercase">
-        Error 404
+        {t("404.etiqueta")}
       </p>
       <h1 class="mt-4 text-4xl font-bold min-[380px]:text-5xl sm:text-6xl">
-        Esta página no <span class="text-gradient">existe</span>
+        {t("404.antes")} <span class="text-gradient">{t("404.resaltado")}</span>
       </h1>
-      <p class="mt-5 text-xl text-ink-muted">
-        Puede que el enlace esté roto o que el proyecto ya no esté publicado.
-      </p>
+      <p class="mt-5 text-xl text-ink-muted">{t("404.texto")}</p>
       <ActionLink
-        href="/"
-        texto="Volver al inicio"
+        href={rutaLocal(lang)}
+        texto={t("404.volver")}
         variante="primario"
         class="mt-10 inline-block"
       />
