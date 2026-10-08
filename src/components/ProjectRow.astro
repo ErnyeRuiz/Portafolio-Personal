@@ -27,7 +27,9 @@ const href = rutaLocal(lang, `proyectos/${proyecto.id}`);
 /* Filas alternadas: la imagen cambia de lado en cada proyecto. */
 const imagenDerecha = indice % 2 === 1;
 const numero = String(indice + 1).padStart(2, "0");
-const etiquetaTipo = t(tipo === "web" ? "proyectos.tipoWeb" : "proyectos.tipoMovil");
+const etiquetaTipo = t(
+  tipo === "web" ? "proyectos.tipoWeb" : "proyectos.tipoMovil",
+);
 
 const externos = [
   repo && { href: repo, texto: t("accion.repositorio") },

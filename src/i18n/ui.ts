@@ -69,7 +69,8 @@ const es = {
   "qr.repoDescripcion": "Abrir el repositorio desde el celular",
 
   "contacto.titulo": "Contacto",
-  "contacto.intro": "¿Tienes un proyecto en mente o quieres conversar? Escríbeme.",
+  "contacto.intro":
+    "¿Tienes un proyecto en mente o quieres conversar? Escríbeme.",
   "contacto.nombre": "Nombre",
   "contacto.correo": "Correo",
   "contacto.mensaje": "Mensaje",
@@ -169,7 +170,8 @@ const en: Record<keyof typeof es, string> = {
   "qr.repoDescripcion": "Open the repository from your phone",
 
   "contacto.titulo": "Contact",
-  "contacto.intro": "Have a project in mind or just want to chat? Drop me a line.",
+  "contacto.intro":
+    "Have a project in mind or just want to chat? Drop me a line.",
   "contacto.nombre": "Name",
   "contacto.correo": "Email",
   "contacto.mensaje": "Message",

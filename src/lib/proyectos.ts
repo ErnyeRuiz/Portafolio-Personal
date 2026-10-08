@@ -30,7 +30,11 @@ export async function obtenerProyectos(lang: Lang): Promise<Proyecto[]> {
     .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
 
   if (lang === IDIOMA_BASE) {
-    return publicados.map((entry) => ({ id: entry.id, data: entry.data, entry }));
+    return publicados.map((entry) => ({
+      id: entry.id,
+      data: entry.data,
+      entry,
+    }));
   }
 
   const traducciones = new Map(
@@ -39,7 +43,9 @@ export async function obtenerProyectos(lang: Lang): Promise<Proyecto[]> {
   const ids = new Set(todos.map(({ id }) => id));
   for (const id of traducciones.keys()) {
     if (!ids.has(id)) {
-      throw new Error(`proyectos/en/${id}.md no tiene su original en proyectos/es.`);
+      throw new Error(
+        `proyectos/en/${id}.md no tiene su original en proyectos/es.`,
+      );
     }
   }
 

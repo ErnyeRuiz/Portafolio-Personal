@@ -59,9 +59,10 @@ const ogUrl = new URL(og.src, Astro.site);
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonica} />
-    {!sinAlternas && IDIOMAS.map((idioma) => (
-      <link rel="alternate" hreflang={idioma} href={urlDe(idioma)} />
-    ))}
+    {!sinAlternas &&
+      IDIOMAS.map((idioma) => (
+        <link rel="alternate" hreflang={idioma} href={urlDe(idioma)} />
+      ))}
     {!sinAlternas && (
       <link rel="alternate" hreflang="x-default" href={urlDe(IDIOMA_BASE)} />
     )}

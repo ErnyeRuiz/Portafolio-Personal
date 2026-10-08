@@ -28,7 +28,9 @@ const { Content } = await render(proyecto.entry);
 // Backend vive en su propio archivo (misma arquitectura limpia, decisiones
 // distintas por proyecto). Es opcional: si no existe, la sección no se pinta.
 const backend = await obtenerBackend(proyecto.id, lang);
-const BackendContent = backend ? (await render(backend.entry)).Content : undefined;
+const BackendContent = backend
+  ? (await render(backend.entry)).Content
+  : undefined;
 
 // El dock de QR ofrece los mismos destinos que los botones, para pasarlos al celular.
 interface DestinoQr {

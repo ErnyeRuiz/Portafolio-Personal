@@ -13,11 +13,16 @@ const rolDespues = t("hero.rolDespues");
     </h1>
 
     <p class="mt-6 max-w-4xl text-4xl font-bold min-[380px]:text-5xl sm:text-6xl">
-      {t("hero.rolAntes")} <span class="text-gradient">Full Stack</span>{rolDespues && ` ${rolDespues}`}
+      {t("hero.rolAntes")} <span class="text-gradient">Full Stack</span>
+      {rolDespues && ` ${rolDespues}`}
     </p>
 
     <div class="mt-12 flex flex-wrap gap-4">
-      <ActionLink href="#sobre-mi" texto={t("nav.sobreMi")} variante="primario" />
+      <ActionLink
+        href="#sobre-mi"
+        texto={t("nav.sobreMi")}
+        variante="primario"
+      />
       <ActionLink href="#proyectos" texto={t("nav.proyectos")} />
     </div>
   </div>
