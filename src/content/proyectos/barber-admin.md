@@ -1,11 +1,9 @@
 ---
 titulo: "BarberAdmin"
-resumen: "App Android de gestión para barberías con multiples experiencias segun el rol: dueños, barberos y clientes"
+resumen: "App Android de gestión para barberías con múltiples experiencias según el rol: dueños, barberos y clientes"
 tipo: "movil"
 portada: "../../assets/proyectos/barber-admin/dashboard-barbero.jpeg"
 galeria:
-  - src: "../../assets/proyectos/barber-admin/dashboard-barbero.jpeg"
-    alt: "Dashboard - Barbero y Admin"
   - src: "../../assets/proyectos/barber-admin/dashboard-cliente.jpeg"
     alt: "Dashboard — Cliente"
   - src: "../../assets/proyectos/barber-admin/crear-cuenta-varios-roles.jpeg"
@@ -29,13 +27,13 @@ galeria:
   - src: "../../assets/proyectos/barber-admin/horario-barberia-barbero-admin.jpeg"
     alt: "Horario de barbería y barbero"
   - src: "../../assets/proyectos/barber-admin/productos-barbero.jpeg"
-    alt: "Gestionar productos — Admin"
+    alt: "Gestionar productos — Barbero"
   - src: "../../assets/proyectos/barber-admin/registro-productos-venta-barbero.jpeg"
     alt: "Registro de productos para venta — Admin"
   - src: "../../assets/proyectos/barber-admin/mantenimiento-servicios-admin.jpeg"
     alt: "Gestionar servicios — Admin"
   - src: "../../assets/proyectos/barber-admin/ventas-productos-admin.jpeg"
-    alt: "Gestionar ventas — Barbero"
+    alt: "Gestionar ventas — Admin"
   - src: "../../assets/proyectos/barber-admin/catalogo-productos-cliente.jpeg"
     alt: "Catálogo de productos — Cliente"
   - src: "../../assets/proyectos/barber-admin/detalle-producto-cliente.jpeg"
@@ -58,13 +56,13 @@ destacado: true
 
 ## Descripción
 
-Aplicación completa para gestionar barberias, citas y clientes:
+Aplicación completa para gestionar barberías, citas y clientes:
 
 - **Administrador:** administra una o varias barberías, sus barberos, clientes, citas y productos.
-- **Barbero:** puede trabajar de forma independiente o en varias barberías, gestionando su citas y su horario.
+- **Barbero:** puede trabajar de forma independiente o en varias barberías, gestionando sus citas y su horario.
 - **Cliente:** puede asociarse a varias barberías y reservar citas con su barbero de preferencia.
 
-El sistema ademas permite gestionar productos en venta, registro de pagos y auditoría, ofreciendo una interfaz facil de usar para cada usuario.
+El sistema además permite gestionar productos en venta, registro de pagos y auditoría, ofreciendo una interfaz fácil de usar para cada usuario.
 
 ## Detalles técnicos
 

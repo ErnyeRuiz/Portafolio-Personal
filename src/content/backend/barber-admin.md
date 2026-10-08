@@ -11,7 +11,7 @@ stack:
 #repo: "https://github.com/usuario/barber-admin-api" # agregar si el repo del API está publicado por separado
 ---
 
-- **Descripcion:** backend multi-tenant para varias barberías, con roles que conviven en un mismo usuario (un Barbero puede además ser Cliente) y contexto de barbería activa embebido en la sesión.
+- **Descripción:** backend multi-tenant para varias barberías, con roles que conviven en un mismo usuario (un Barbero puede además ser Cliente) y contexto de barbería activa embebido en la sesión.
 - **Alcance:** 12 módulos (auth, barberías, servicios, citas, cortes, productos, compras, ventas, inventario, clientes, auditoría), desplegado en producción con CI/CD.
 
 ## Detalles técnicos
