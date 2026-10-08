@@ -82,24 +82,26 @@
   pointer-events: none;
   background:
     radial-gradient(
-      ellipse 55% 65% at 75% 35%,
+      ellipse 60rem 40rem at 75% 35%,
       rgb(14 165 233 / 0.28),
       transparent 70%
     ),
     radial-gradient(
-      ellipse 45% 55% at 8% 90%,
+      ellipse 50rem 35rem at 8% 90%,
       rgb(2 132 199 / 0.2),
       transparent 70%
     );
 }
 
-/* Variante suave para secciones interiores */
+/* Variante suave para secciones interiores. El centro baja a 15% y la máscara
+   desvanece el borde superior: sin ella el glow se corta en seco arriba. */
 .glow-soft::before {
   background: radial-gradient(
-    ellipse 60% 50% at 50% 0%,
+    ellipse 60% 50% at 50% 15%,
     rgb(14 165 233 / 0.14),
     transparent 70%
   );
+  mask-image: linear-gradient(transparent, #000 15%);
 }
 
 /* Borde con degradado, como las tarjetas de la referencia */
