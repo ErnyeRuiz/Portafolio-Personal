@@ -1,5 +1,10 @@
 ---
-import { getCollection, getEntry, render } from "astro:content";
+import {
+  getCollection,
+  getEntry,
+  render,
+  type CollectionEntry,
+} from "astro:content";
 import type { GetStaticPaths } from "astro";
 
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -10,6 +15,10 @@ import TagList from "../../components/TagList.astro";
 import Gallery from "../../components/Gallery.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { SITIO } from "../../config";
+
+interface Props {
+  proyecto: CollectionEntry<"proyectos">;
+}
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const proyectos = await getCollection("proyectos", ({ data }) => !data.draft);
@@ -30,23 +39,29 @@ const backend = await getEntry("backend", proyecto.id);
 const BackendContent = backend ? (await render(backend)).Content : undefined;
 
 // El dock de QR ofrece los mismos destinos que los botones, para pasarlos al celular.
+interface DestinoQr {
+  etiqueta: string;
+  href: string;
+  descripcion: string;
+}
+
 const qrItems = [
-  apk && {
+  {
     etiqueta: "APK",
-    href: apk.url,
+    href: apk?.url,
     descripcion: "Descargar el APK desde el celular",
   },
-  demo && {
+  {
     etiqueta: "Sitio",
     href: demo,
     descripcion: "Abrir el sitio desde el celular",
   },
-  repo && {
+  {
     etiqueta: "Repo",
     href: repo,
     descripcion: "Abrir el repositorio desde el celular",
   },
-].filter((item): item is NonNullable<typeof item> => Boolean(item));
+].filter((item): item is DestinoQr => Boolean(item.href));
 ---
 
 {/* La portada de un proyecto móvil es vertical y las redes la recortan mal:
