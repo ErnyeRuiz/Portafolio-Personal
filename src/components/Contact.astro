@@ -67,6 +67,15 @@ const claseCampo =
               </label>
             </div>
 
+            {/* Encima de la fila del botón: abajo quedaba fuera de pantalla en celular. */}
+            <p
+              id="form-error"
+              role="alert"
+              tabindex="-1"
+              class="franja-error rounded-card px-4 py-3 text-sm"
+            >
+            </p>
+
             <div class="campo-salida flex flex-wrap items-center gap-4" style="--i: 3">
               <button
                 type="submit"
@@ -90,14 +99,6 @@ const claseCampo =
                 }
               </div>
             </div>
-
-            <p
-              id="form-error"
-              role="alert"
-              tabindex="-1"
-              class="franja-error rounded-card px-4 py-3 text-sm"
-            >
-            </p>
           </form>
         </div>
       </div>
@@ -162,6 +163,11 @@ const claseCampo =
     void error.offsetWidth;
     error.classList.add("shake");
     error.focus({ preventScroll: true });
+    const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
+    error.scrollIntoView({
+      block: "nearest",
+      behavior: sinMovimiento.matches ? "auto" : "smooth",
+    });
   }
 
   form?.addEventListener("submit", async (e) => {
