@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portafolio-personal-phi-black.vercel.app/sitemap-index.xml

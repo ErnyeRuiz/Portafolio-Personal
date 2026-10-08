@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITIO } from "../config";
+---
+
+<BaseLayout titulo={`Página no encontrada — ${SITIO.nombre}`}>
+  <section class="glow-field flex min-h-[70dvh] items-center py-24">
+    <div class="mx-auto max-w-3xl px-6">
+      <p class="font-display text-sm tracking-[0.2em] text-accent uppercase">
+        Error 404
+      </p>
+      <h1 class="mt-4 text-4xl font-bold min-[380px]:text-5xl sm:text-6xl">
+        Esta página no <span class="text-gradient">existe</span>
+      </h1>
+      <p class="mt-5 text-xl text-ink-muted">
+        Puede que el enlace esté roto o que el proyecto ya no esté publicado.
+      </p>
+      <a
+        href="/"
+        class="mt-10 inline-block rounded-pill bg-accent px-7 py-3.5 font-medium text-bg transition hover:bg-accent-soft"
+      >
+        Volver al inicio
+      </a>
+    </div>
+  </section>
+</BaseLayout>
