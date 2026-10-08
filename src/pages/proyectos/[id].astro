@@ -246,7 +246,7 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
               data-lightbox-img
               src=""
               alt=""
-              class="min-h-0 max-w-full flex-1 rounded-card object-contain shadow-2xl shadow-black/60"
+              class="min-h-0 max-w-full flex-1 touch-pinch-zoom rounded-card object-contain shadow-2xl shadow-black/60"
             />
             <p class="text-center text-sm text-ink-muted">
               <span data-lightbox-caption />
@@ -430,21 +430,27 @@ const anchoSlide =(tipoCaptura: "web" | "movil") =>
       if (e.key === "ArrowRight") mostrar(actual + 1, 1);
     });
 
-    // Swipe horizontal en pantallas táctiles.
+    // Swipe horizontal en pantallas táctiles. Un gesto con dos dedos (pinch-zoom)
+    // no cuenta como swipe.
     let inicioX = 0;
+    let conDosDedos = false;
     dialog.addEventListener(
       "touchstart",
-      (e) => (inicioX = e.touches[0].clientX),
+      (e) => {
+        if (e.touches.length > 1) conDosDedos = true;
+        else inicioX = e.touches[0].clientX;
+      },
       { passive: true },
     );
     dialog.addEventListener(
       "touchend",
       (e) => {
         const dx = e.changedTouches[0].clientX - inicioX;
-        if (Math.abs(dx) > 50) {
+        if (!conDosDedos && Math.abs(dx) > 50) {
           const dir = dx < 0 ? 1 : -1;
           mostrar(actual + dir, dir);
         }
+        if (e.touches.length === 0) conDosDedos = false;
       },
       { passive: true },
     );
