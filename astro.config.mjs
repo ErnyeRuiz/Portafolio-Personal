@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -14,6 +14,15 @@ export default defineConfig({
 
   // Oculta la barra de herramientas de Astro que aparece en `astro dev`.
   devToolbar: { enabled: false },
+
+  // Variables del formulario de contacto: solo servidor, nunca llegan al cliente.
+  env: {
+    schema: {
+      BREVO_API_KEY: envField.string({ context: 'server', access: 'secret' }),
+      CONTACT_FROM_EMAIL: envField.string({ context: 'server', access: 'secret' }),
+      CONTACT_TO_EMAIL: envField.string({ context: 'server', access: 'secret' }),
+    },
+  },
 
   vite: {
     plugins: [tailwindcss()]
