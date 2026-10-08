@@ -67,8 +67,8 @@ inválido y honeypot. En cada push y PR a `development` y `main`, el CI corre
 
 ## Agregar un proyecto
 
-1. Poné las capturas en `src/assets/proyectos/<nombre-del-proyecto>/`.
-2. Creá `src/content/proyectos/<nombre-del-proyecto>.md`:
+1. Pon las capturas en `src/assets/proyectos/<nombre-del-proyecto>/`.
+2. Crea `src/content/proyectos/<nombre-del-proyecto>.md`:
 
 ```markdown
 ---

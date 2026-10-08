@@ -6,5 +6,5 @@ export const SITIO = {
     "Portafolio de Ernye Ruiz, desarrollador Full Stack. .NET, Angular, Flutter y SQL Server.",
   github: "https://github.com/ErnyeRuiz",
   linkedin: "https://www.linkedin.com/in/ernye-ruiz-044a9b139",
-  email: "ernye1010@gmail.com",
+  email: "ernye.dev@gmail.com",
 } as const;

@@ -21,7 +21,7 @@ const { titulo, resumen, tipo, portada, stack, rol, repo, demo, apk } =
 /* Filas alternadas: la imagen cambia de lado en cada proyecto. */
 const imagenDerecha = indice % 2 === 1;
 const numero = String(indice + 1).padStart(2, "0");
-const etiquetaTipo = tipo === "web" ? "Web" : "Móvil";
+const etiquetaTipo = tipo === "web" ? "Frontend" : "Mobile";
 
 const externos = [
   repo && { href: repo, texto: "Repositorio ↗" },
