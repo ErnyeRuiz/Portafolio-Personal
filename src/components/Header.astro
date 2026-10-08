@@ -9,8 +9,11 @@ const enlaces = [
 const enInicio = Astro.url.pathname === "/";
 ---
 
+{/* El blur va en un ::before y no en el <header>: un backdrop-filter en el
+    ancestro hace que el blur del menú desplegable solo "vea" el header y no la
+    página, y el menú se ve transparente. */}
 <header
-  class="sticky top-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur-lg"
+  class="sticky top-0 z-50 border-b border-border/60 before:absolute before:inset-0 before:-z-10 before:bg-bg/70 before:backdrop-blur-lg before:content-['']"
 >
   <nav
     class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
@@ -101,7 +104,8 @@ const enInicio = Astro.url.pathname === "/";
     if ((e.target as HTMLElement).closest("a")) setOpen(false);
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
+    // Solo actúa con el menú abierto: si no, robaría el foco a un input o diálogo.
+    if (e.key === "Escape" && menu?.hasAttribute("data-open")) {
       setOpen(false);
       toggle?.focus();
     }
