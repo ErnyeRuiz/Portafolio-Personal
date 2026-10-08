@@ -1,12 +1,11 @@
 ---
+import { SITIO } from "../config";
+
 const enlaces = [
   { href: "/#sobre-mi", texto: "Sobre mí" },
   { href: "/#proyectos", texto: "Proyectos" },
   { href: "/#contacto", texto: "Contacto" },
 ];
-
-// "Inicio" solo tiene sentido fuera del inicio.
-const enInicio = Astro.url.pathname === "/";
 ---
 
 {/* El blur va en un ::before y no en el <header>: un backdrop-filter en el
@@ -19,16 +18,13 @@ const enInicio = Astro.url.pathname === "/";
     class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
     aria-label="Principal"
   >
-    {
-      !enInicio && (
-        <a
-          href="/"
-          class="font-display text-base font-bold tracking-tight whitespace-nowrap hover:text-accent-soft sm:text-lg"
-        >
-          Inicio
-        </a>
-      )
-    }
+    <a
+      href="/"
+      data-marca
+      class="font-display text-base font-bold tracking-tight whitespace-nowrap hover:text-accent-soft sm:text-lg"
+    >
+      {SITIO.nombre}
+    </a>
 
     <button
       type="button"
@@ -99,6 +95,13 @@ const enInicio = Astro.url.pathname === "/";
   toggle?.addEventListener("click", () =>
     setOpen(toggle.getAttribute("aria-expanded") !== "true"),
   );
+  // En la portada la marca no recarga: sube al inicio de la página.
+  document.querySelector("[data-marca]")?.addEventListener("click", (e) => {
+    if (window.location.pathname !== "/") return;
+    e.preventDefault();
+    setOpen(false);
+    window.scrollTo({ top: 0 });
+  });
   // Un enlace lleva a un ancla: el menú se cierra para no tapar la sección.
   menu?.addEventListener("click", (e) => {
     if ((e.target as HTMLElement).closest("a")) setOpen(false);
