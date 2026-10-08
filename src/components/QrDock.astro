@@ -152,16 +152,6 @@ const paneles = await Promise.all(
     const panel = dock.querySelector<HTMLElement>("[data-qr-panel]")!;
     const tabs = dock.querySelectorAll<HTMLButtonElement>("[data-qr-tab]");
     const items = dock.querySelectorAll<HTMLElement>("[data-qr-item]");
-    const CLAVE = "qr-dock-abierto";
-
-    const guardar = (abierto: boolean) => {
-      try {
-        localStorage.setItem(CLAVE, abierto ? "1" : "0");
-      } catch {
-        /* sin storage: el dock sigue funcionando, solo no recuerda */
-      }
-    };
-
     const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const abrir = (abierto: boolean, enfocar = false) => {
@@ -192,28 +182,18 @@ const paneles = await Promise.all(
       else panel.addEventListener("animationend", terminar, { once: true });
     };
 
-    toggle.addEventListener("click", () => {
-      abrir(true, true);
-      guardar(true);
-    });
-    dock.querySelector("[data-qr-close]")?.addEventListener("click", () => {
-      abrir(false, true);
-      guardar(false);
-    });
+    toggle.addEventListener("click", () => abrir(true, true));
+    dock
+      .querySelector("[data-qr-close]")
+      ?.addEventListener("click", () => abrir(false, true));
     dock.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !panel.hidden) {
-        abrir(false, true);
-        guardar(false);
-      }
+      if (e.key === "Escape" && !panel.hidden) abrir(false, true);
     });
 
     // Clic fuera del dock lo recoge. No se mueve el foco: el usuario ya
     // eligió dónde hacer clic.
     document.addEventListener("click", (e) => {
-      if (!panel.hidden && !dock.contains(e.target as Node)) {
-        abrir(false);
-        guardar(false);
-      }
+      if (!panel.hidden && !dock.contains(e.target as Node)) abrir(false);
     });
 
     tabs.forEach((tab, i) =>
@@ -222,12 +202,5 @@ const paneles = await Promise.all(
         items.forEach((item, j) => (item.hidden = j !== i));
       }),
     );
-
-    // Arranca recogido; si ya lo abriste una vez, recuerda que lo preferís abierto.
-    try {
-      if (localStorage.getItem(CLAVE) === "1") abrir(true);
-    } catch {
-      /* ignorar */
-    }
   }
 </script>
