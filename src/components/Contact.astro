@@ -207,7 +207,7 @@ const claseCampo =
     error.focus({ preventScroll: true });
     const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
     error.scrollIntoView({
-      block: "nearest",
+      block: "center",
       behavior: sinMovimiento.matches ? "auto" : "smooth",
     });
   }

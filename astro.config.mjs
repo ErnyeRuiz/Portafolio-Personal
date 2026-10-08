@@ -28,6 +28,8 @@ export default defineConfig({
         access: "secret",
       }),
     },
+    // Falla el build si falta alguna: mejor un deploy rojo que un formulario roto.
+    validateSecrets: true,
   },
 
   vite: {

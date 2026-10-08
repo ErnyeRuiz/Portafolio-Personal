@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ActionLink from "../components/ActionLink.astro";
 import { SITIO } from "../config";
 ---
 
@@ -15,12 +16,12 @@ import { SITIO } from "../config";
       <p class="mt-5 text-xl text-ink-muted">
         Puede que el enlace esté roto o que el proyecto ya no esté publicado.
       </p>
-      <a
+      <ActionLink
         href="/"
-        class="mt-10 inline-block rounded-pill bg-accent px-7 py-3.5 font-medium text-bg transition hover:bg-accent-soft"
-      >
-        Volver al inicio
-      </a>
+        texto="Volver al inicio"
+        variante="primario"
+        class="mt-10 inline-block"
+      />
     </div>
   </section>
 </BaseLayout>

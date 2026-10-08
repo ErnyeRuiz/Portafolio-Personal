@@ -12,6 +12,7 @@ interface Props {
 interface Enlace {
   href: string;
   texto: string;
+  descarga?: boolean;
 }
 
 const { proyecto, indice } = Astro.props;
@@ -26,7 +27,7 @@ const etiquetaTipo = tipo === "web" ? "Frontend" : "Mobile";
 const externos = [
   repo && { href: repo, texto: "Repositorio ↗" },
   demo && { href: demo, texto: "Visitar ↗" },
-  apk && { href: apk.url, texto: "Descargar APK ↓" },
+  apk && { href: apk.url, texto: "Descargar APK ↓", descarga: true },
 ].filter((enlace): enlace is Enlace => Boolean(enlace));
 ---
 
@@ -67,7 +68,7 @@ const externos = [
         variante="primario"
       />
       {externos.map((enlace) => (
-        <ActionLink {...enlace} externo />
+        <ActionLink {...enlace} externo={!enlace.descarga} />
       ))}
     </div>
   </div>
