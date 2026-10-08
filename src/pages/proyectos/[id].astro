@@ -6,6 +6,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import DeviceFrame from "../../components/DeviceFrame.astro";
 import ActionLink from "../../components/ActionLink.astro";
 import QrDock from "../../components/QrDock.astro";
+import TagList from "../../components/TagList.astro";
 import Gallery from "../../components/Gallery.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { SITIO } from "../../config";
@@ -63,22 +64,7 @@ const qrItems = [
       <h1 class="mt-8 text-4xl font-bold min-[380px]:text-5xl sm:text-6xl">{titulo}</h1>
       <p class="mt-5 text-xl text-ink-muted">{resumen}</p>
 
-      <ul class="mt-7 flex flex-wrap gap-2">
-        {
-          rol && (
-            <li class="rounded-pill border border-accent/40 bg-accent/10 px-3 py-1 text-sm text-accent-soft">
-              {rol}
-            </li>
-          )
-        }
-        {
-          stack.map((tec) => (
-            <li class="rounded-pill border border-border bg-surface px-3 py-1 text-sm text-ink-muted">
-              {tec}
-            </li>
-          ))
-        }
-      </ul>
+      <TagList rol={rol} stack={stack} class="mt-7" />
     </div>
 
     <div class="mx-auto mt-16 max-w-5xl px-6">
@@ -92,12 +78,19 @@ const qrItems = [
                 <ActionLink
                   href={apk.url}
                   texto="Descargar APK ↓"
-                  primario
+                  variante="primario"
                   descarga
                 />
               )}
-              {demo && <ActionLink href={demo} texto="Visitar ↗" primario />}
-              {repo && <ActionLink href={repo} texto="Repositorio ↗" />}
+              {demo && (
+                <ActionLink
+                  href={demo}
+                  texto="Visitar ↗"
+                  variante="primario"
+                  externo
+                />
+              )}
+              {repo && <ActionLink href={repo} texto="Repositorio ↗" externo />}
             </div>
             {apk && (
               <p class="max-w-md text-sm text-ink-muted">
@@ -141,24 +134,15 @@ const qrItems = [
               {backend.data.arquitectura}
             </h2>
 
-            <ul class="mt-6 flex flex-wrap gap-2">
-              {backend.data.stack.map((tec) => (
-                <li class="rounded-pill border border-border bg-bg px-3 py-1 text-sm text-ink-muted">
-                  {tec}
-                </li>
-              ))}
-            </ul>
+            <TagList stack={backend.data.stack} fondo="bg" class="mt-6" />
 
             {backend.data.repo && (
               <div class="mt-7">
-                <a
+                <ActionLink
                   href={backend.data.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="rounded-pill border border-border px-5 py-2.5 text-sm font-medium text-ink-muted transition hover:border-accent hover:text-ink"
-                >
-                  Repositorio ↗
-                </a>
+                  texto="Repositorio ↗"
+                  externo
+                />
               </div>
             )}
 

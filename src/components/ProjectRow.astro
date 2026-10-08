@@ -1,10 +1,17 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import DeviceFrame from "./DeviceFrame.astro";
+import ActionLink from "./ActionLink.astro";
+import TagList from "./TagList.astro";
 
 interface Props {
   proyecto: CollectionEntry<"proyectos">;
   indice: number;
+}
+
+interface Enlace {
+  href: string;
+  texto: string;
 }
 
 const { proyecto, indice } = Astro.props;
@@ -16,17 +23,11 @@ const imagenDerecha = indice % 2 === 1;
 const numero = String(indice + 1).padStart(2, "0");
 const etiquetaTipo = tipo === "web" ? "Web" : "Móvil";
 
-const enlaces = [
-  { href: `/proyectos/${proyecto.id}`, texto: "Ver caso", principal: true },
-  repo && { href: repo, texto: "Repositorio ↗", externo: true },
-  demo && { href: demo, texto: "Visitar ↗", externo: true },
-  apk && { href: apk.url, texto: "Descargar APK ↓", externo: true },
-].filter(Boolean) as {
-  href: string;
-  texto: string;
-  principal?: boolean;
-  externo?: boolean;
-}[];
+const externos = [
+  repo && { href: repo, texto: "Repositorio ↗" },
+  demo && { href: demo, texto: "Visitar ↗" },
+  apk && { href: apk.url, texto: "Descargar APK ↓" },
+].filter((enlace): enlace is Enlace => Boolean(enlace));
 ---
 
 <article class="rise grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -57,45 +58,15 @@ const enlaces = [
 
     <p class="mt-4 max-w-prose text-lg text-ink-muted">{resumen}</p>
 
-    <ul class="mt-6 flex flex-wrap gap-2">
-      {
-        rol && (
-          <li class="rounded-pill border border-accent/40 bg-accent/10 px-3 py-1 text-sm text-accent-soft">
-            {rol}
-          </li>
-        )
-      }
-      {
-        stack.map((tec) => (
-          <li class="rounded-pill border border-border bg-surface px-3 py-1 text-sm text-ink-muted">
-            {tec}
-          </li>
-        ))
-      }
-    </ul>
+    <TagList rol={rol} stack={stack} class="mt-6" />
 
     <div class="mt-8 flex flex-wrap items-center gap-3">
-      {
-        enlaces.map(({ href, texto, principal, externo }) =>
-          principal ? (
-            <a
-              href={href}
-              class="rounded-pill bg-accent px-6 py-3 font-medium text-bg transition hover:bg-accent-soft"
-            >
-              {texto} →
-            </a>
-          ) : (
-            <a
-              href={href}
-              target={externo ? "_blank" : undefined}
-              rel={externo ? "noopener noreferrer" : undefined}
-              class="rounded-pill border border-border px-6 py-3 font-medium text-ink-muted transition hover:border-accent hover:text-ink"
-            >
-              {texto}
-            </a>
-          ),
-        )
-      }
+      <ActionLink
+        href={`/proyectos/${proyecto.id}`}
+        texto="Ver caso →"
+        variante="primario"
+      />
+      {externos.map((enlace) => <ActionLink {...enlace} externo />)}
     </div>
   </div>
 </article>
