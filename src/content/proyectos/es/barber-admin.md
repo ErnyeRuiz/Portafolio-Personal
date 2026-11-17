@@ -45,9 +45,7 @@ galeria:
 stack: ["Flutter", "BLoC", "Clean Architecture", ".NET", "SQL"]
 rol: "Android"
 apk:
-  url: "https://pub-66dadff9bc034ef991e435f0ccb4ccbe.r2.dev/barber-admin-1.0.0.apk"
-  tamano: "75 MB"
-  version: "1.0.0"
+  url: "https://pub-66dadff9bc034ef991e435f0ccb4ccbe.r2.dev/barber-admin-staging.apk"
 fecha: 2026-07-01
 destacado: true
 ---
